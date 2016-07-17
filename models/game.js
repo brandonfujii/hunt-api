@@ -12,6 +12,11 @@ var gameSchema = mongoose.Schema({
     {
       _id: String
     }
+  ],
+  checkpoints: [
+    {
+      _id: String
+    }
   ]
 });
 
