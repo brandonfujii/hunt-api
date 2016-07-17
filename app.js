@@ -142,7 +142,21 @@ app.get('/sample', function(req, res, next) {
       }
     ]
   );
-})
+});
+
+// app.get('/video/url', function(req, res) {
+//   const filename = 'saveForSlicing.mp4';
+
+//   res.send({
+//     team: 'someTeamId',
+//     filename: filename
+//   });
+  
+// });
+
+app.get('/video/:filename', function(req, res) {
+  res.sendFile('/videos/' + req.params.filename, {root: __dirname});
+});
 
 // Start Server
 var port = process.env.PORT || 1738;

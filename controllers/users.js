@@ -22,7 +22,7 @@ module.exports.getUserById = function(id, cb) {
   UserModel.User.findById(id, cb);
   getGameCheckpoints()
     .then(function(checkpoints) {
-      console.log(checkpoints);
+      console.log(checkpoints[0].checkpoints);
     });
 }
 
