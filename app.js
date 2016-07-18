@@ -20,10 +20,10 @@ mongoose.connect(process.env.MONGO_DB);
 var db = mongoose.connection;
 
 // Define controller routers
-var GameRouter = express.Router(),
+var HuntRouter = express.Router(),
     UserRouter = express.Router(),
     TeamRouter = express.Router(),
-    CheckpointRouter = express.Router();
+    TaskRouter = express.Router();
 
 // Define home route
 app.get('/', function(req, res, next) {
@@ -31,10 +31,10 @@ app.get('/', function(req, res, next) {
 });
 
 // Define controller routes
-app.use('/api/games', GameRouter);
+app.use('/api/hunts', HuntRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/teams', TeamRouter);
-app.use('/api/checkpoints', CheckpointRouter);
+app.use('/api/tasks', TaskRouter);
 
 var Controllers = require('./controllers/init');
 
@@ -61,8 +61,8 @@ UserRouter.get('/', function(req, res, next) {
   })
 });
 
-// POST /users
-UserRouter.post('/', function(req, res) {
+// POST /users/create
+UserRouter.post('/create', function(req, res) {
   var newUser = req.body;
   Controllers.User.addUser(newUser, function(err, newUser) {
     if (err) {
@@ -110,11 +110,17 @@ TeamRouter.get('/', function(req, res, next) {
   res.send('Teams and shit!');
 });
 
-CheckpointRouter.get('/', function(req, res, next) {
-  res.send('Checkpoints and shit!');
+/* HUNT ROUTES */
+HuntRouter.get('/', function(req, res, next) {
+  res.send('Hunts and shit!');
 });
 
-/* Sample checkpoint */
+/* TASK ROUTES */
+TaskRouter.get('/', function(req, res, next) {
+  res.send('Tasks and shit!');
+});
+
+/* Sample task */
 app.get('/sample', function(req, res, next) {
   res.json(
     [
@@ -124,10 +130,9 @@ app.get('/sample', function(req, res, next) {
           lon: -73.989643
         },
         clue: {
+          title: "HackMIT",
           description: "Think Fast. It will all add up."
-        },
-        title: '4th Street',
-        description: "it's just a street"
+        }
       },
       {
         location: {
@@ -135,10 +140,9 @@ app.get('/sample', function(req, res, next) {
           lon: -73.987862
         },
         clue: {
-          description: "Hey, go fuck yourself"
-        },
-        title: 'NYU Palladium',
-        description: 'Pally is pretty cool itself'
+          title: "NYU Palladium Hall",
+          description: "Find something to do here."
+        }
       }
     ]
   );
@@ -151,10 +155,10 @@ app.get('/video/url', function(req, res) {
     team: 'someTeamId',
     filename: filename
   });
-  
+
 });
 
-app.get('/video/:filename', function(req, res) {
+app.get('/videos/:filename', function(req, res) {
   res.sendFile('/videos/' + req.params.filename, {root: __dirname});
 });
 

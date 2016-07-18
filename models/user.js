@@ -4,10 +4,12 @@ var userSchema = mongoose.Schema({
   name: String,
   teamId: String, 
   points: Number,
-  checkpoints: [
+  completedTasks: [
     {
       _id: String, 
-      date: Date
+      date: Date,
+      order: Number,
+      filename: String
     }
   ]
 });

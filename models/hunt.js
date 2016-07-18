@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var gameSchema = mongoose.Schema({
+var huntSchema = mongoose.Schema({
   startDate: Date,
   endDate: Date,
   teams: [
@@ -13,7 +13,7 @@ var gameSchema = mongoose.Schema({
       _id: String
     }
   ],
-  checkpoints: [
+  tasks: [
     {
       _id: String
     }
@@ -21,5 +21,5 @@ var gameSchema = mongoose.Schema({
 });
 
 module.exports = {
-  Game: mongoose.model('Game', gameSchema)
+  Hunt: mongoose.model('Hunt', huntSchema)
 }

@@ -8,10 +8,12 @@ var teamSchema = mongoose.Schema({
       _id: String
     }
   ],
-  checkpoints: [
+  completedTasks: [
     {
       _id: String,
-      date: Date
+      date: Date,
+      order: Number,
+      filename: String
     }
   ]
 });

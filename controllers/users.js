@@ -1,15 +1,15 @@
 var mongoose = require('mongoose');
 var UserModel = require('../models/user'),
     TeamModel = require('../models/team'),
-    GameModel = require('../models/game');
+    HuntModel = require('../models/hunt');
 var _ = require('underscore');
 
 var getTeamByUserId = function(id) {
   return TeamModel.Team.find({'users._id': {$in: [id]}});
 }
 
-var getGameCheckpoints = function(team_checkpoints) {
-  return GameModel.Game.find('checkpoints');
+var getHuntTasks = function() {
+  return HuntModel.Hunt.find('tasks');
 }
 
 // GET /users
@@ -20,9 +20,9 @@ module.exports.getUsers = function(cb, limit) {
 // GET /users/:id
 module.exports.getUserById = function(id, cb) {
   UserModel.User.findById(id, cb);
-  getGameCheckpoints()
-    .then(function(checkpoints) {
-      console.log(checkpoints[0].checkpoints);
+  getHuntTasks()
+    .then(function(tasks) {
+      console.log(tasks[0].tasks);
     });
 }
 

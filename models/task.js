@@ -1,17 +1,16 @@
 var mongoose = require('mongoose');
 
-var checkpointSchema = mongoose.Schema({
+var taskSchema = mongoose.Schema({
   location: {
     lat: Double,
     lon: Double
   },
   clue: {
+    title: String,
     description: String
-  },
-  title: String,
-  description: String
+  }
 });
 
 module.exports = {
-  Checkpoint: mongoose.model('Checkpoint', checkpointSchema)
+  Task: mongoose.model('Task', taskSchema)
 }
