@@ -1,16 +1,11 @@
-var mongoose = require('mongoose');
-var UserModel = require('../models/user'),
-    TeamModel = require('../models/team'),
-    HuntModel = require('../models/hunt');
+var mongoose = require('mongoose'),
+    UserModel = require('../models/user');
+
+var TeamController = require('./teams'),
+    HuntController = require('./hunts');
+
 var _ = require('underscore');
 
-var getTeamByUserId = function(id) {
-  return TeamModel.Team.find({'users._id': {$in: [id]}});
-}
-
-var getHuntTasks = function() {
-  return HuntModel.Hunt.find('tasks');
-}
 
 // GET /users
 module.exports.getUsers = function(cb, limit) {
@@ -20,9 +15,9 @@ module.exports.getUsers = function(cb, limit) {
 // GET /users/:id
 module.exports.getUserById = function(id, cb) {
   UserModel.User.findById(id, cb);
-  getHuntTasks()
+  HuntController.getHuntTasks()
     .then(function(tasks) {
-      console.log(tasks[0].tasks);
+      console.log(tasks);
     });
 }
 
@@ -50,7 +45,7 @@ module.exports.updateUser = function(id, user, options, cb) {
 }
 
 module.exports.checkUserIn = function(id, user, checkpoint, options, cb) {
-  getTeamByUserId(id)
+  TeamController.getTeamByUserId(id)
     .then(function(team) {
       var updated_team_checkpoints = team.checkpoints.concat([checkpoint]),
           updated_user_checkpoints = user.checkpoints.concat([checkpoint]);

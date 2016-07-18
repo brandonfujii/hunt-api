@@ -4,7 +4,7 @@ var userSchema = mongoose.Schema({
   name: String,
   teamId: String, 
   points: Number,
-  completedTasks: [
+  completedExperiences: [
     {
       _id: String, 
       date: Date,

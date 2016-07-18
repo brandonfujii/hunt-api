@@ -8,7 +8,7 @@ var teamSchema = mongoose.Schema({
       _id: String
     }
   ],
-  completedTasks: [
+  completedExperiences: [
     {
       _id: String,
       date: Date,

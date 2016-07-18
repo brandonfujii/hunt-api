@@ -23,7 +23,7 @@ var db = mongoose.connection;
 var HuntRouter = express.Router(),
     UserRouter = express.Router(),
     TeamRouter = express.Router(),
-    TaskRouter = express.Router();
+    ExperienceRouter = express.Router();
 
 // Define home route
 app.get('/', function(req, res, next) {
@@ -34,7 +34,7 @@ app.get('/', function(req, res, next) {
 app.use('/api/hunts', HuntRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/teams', TeamRouter);
-app.use('/api/tasks', TaskRouter);
+app.use('/api/experiences', ExperienceRouter);
 
 var Controllers = require('./controllers/init');
 
@@ -116,8 +116,37 @@ HuntRouter.get('/', function(req, res, next) {
 });
 
 /* TASK ROUTES */
-TaskRouter.get('/', function(req, res, next) {
+ExperienceRouter.get('/', function(req, res, next) {
   res.send('Tasks and shit!');
+});
+
+ExperienceRouter.post('/complete/:_id', function(req, res, next) {
+  var userId = req.body.userId,
+      fileName = req.body.filename,
+      experienceId = req.params._id;
+
+  Controllers.Experience.updateOnVideoUpload(userId, fileName, experienceId, function(err, team) {
+    var teamId = team._id;
+    var currentCompletedExperiences = team.completedExperiences;
+    
+    Controllers.Experience.getExperienceById(experienceId, function(err, experience) {
+      var location = experience.location,
+          clue = experience.clue,
+          taskTitle = experience.task.title;
+
+      var newCompletedExperience = {
+        teamId: teamId,
+        filename: fileName,
+        taskTitle: taskTitle,
+        clue: clue,
+        location: location
+      };
+
+      currentCompletedExperiences = currentCompletedExperiences.concat([newCompletedExperience]);
+      res.json(currentCompletedExperiences);
+    });
+
+  });
 });
 
 /* Sample task */
@@ -127,21 +156,31 @@ app.get('/sample', function(req, res, next) {
       {
         location: {
           lat: 40.733855, 
-          lon: -73.989643
+          lon: -73.989643,
+          name: "Location name"
         },
         clue: {
           title: "HackMIT",
           description: "Think Fast. It will all add up."
+        },
+        task: {
+          title: "Some Task Title 1",
+          description: "Some Task Description"
         }
       },
       {
         location: {
           lat: 40.733643, 
-          lon: -73.987862
+          lon: -73.987862,
+          name: "Location name 2: Electric Boogaloo"
         },
         clue: {
           title: "NYU Palladium Hall",
           description: "Find something to do here."
+        },
+        task: {
+          title: "Some Task Title 2: Electric Boogaloo",
+          description: "Some Task Description"
         }
       }
     ]

@@ -2,12 +2,9 @@ var mongoose = require('mongoose');
 
 var taskSchema = mongoose.Schema({
   location: {
-    lat: Double,
-    lon: Double
-  },
-  clue: {
-    title: String,
-    description: String
+    lat: Number,
+    lon: Number,
+    name: String
   }
 });
 
