@@ -10,11 +10,18 @@ var teamSchema = mongoose.Schema({
   ],
   completedExperiences: [
     {
-      _id: String,
-      taskId: String,
-      date: Date,
-      order: Number,
-      filename: String
+      experienceId: String,
+      teamId: String,
+      taskTitle: String,
+      filename: String,
+      clue: {
+        title: String,
+        description: String
+      },
+      location: {
+        lat: Number,
+        lon: Number
+      }
     }
   ]
 });

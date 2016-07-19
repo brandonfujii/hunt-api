@@ -42,9 +42,9 @@ module.exports.updateTeam = function(id, team, options, cb) {
 // UPDATE /teams/:id > completedExperiences
 module.exports.updateCompletedExperiencesById = function(id, newExperience, options, cb) {
   console.log(newExperience);
+
   TeamModel.Team.findByIdAndUpdate(id, 
-    { $addToSet: 
-      { completedExperiences : newExperience } 
+    { $addToSet: { completedExperiences : newExperience } 
     }, options, cb);
 }
 

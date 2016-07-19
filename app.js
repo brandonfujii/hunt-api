@@ -363,6 +363,7 @@ ExperienceRouter.post('/complete/:_id', function(req, res, next) {
       Controllers.Task.getTaskById(taskId, function(err, task) {
         var taskTitle = task.title;
         var newCompletedExperience = {
+            experienceId: experienceId,
             teamId: teamId,
             filename: fileName,
             taskTitle: taskTitle,
@@ -375,6 +376,7 @@ ExperienceRouter.post('/complete/:_id', function(req, res, next) {
           if (err) {
             throw err;
           }
+          console.log(experience);
           res.json(experience);
         });
 
@@ -382,7 +384,7 @@ ExperienceRouter.post('/complete/:_id', function(req, res, next) {
 
         // Generate new experience
         Controllers.Experience.generateNextExperienceByTeamId(teamId);
-        
+
         // send back to client
         // list of completedExperiences
         // nextExperience
