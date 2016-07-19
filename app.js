@@ -243,7 +243,7 @@ TaskRouter.get('/', function(req, res, next) {
 // POST /teams/create
 TaskRouter.post('/create', function(req, res) {
   var newTask = req.body;
-  Controllers.Task.addTeam(newTask, function(err, newTask) {
+  Controllers.Task.addTask(newTask, function(err, newTask) {
     if (err) {
       throw err;
     }
@@ -376,17 +376,11 @@ ExperienceRouter.post('/complete/:_id', function(req, res, next) {
           if (err) {
             throw err;
           }
-          res.json(experience);
+
+          Controllers.Experience.generateNextExperienceByTeamId(teamId, newCompletedExperience, function(responseObject) {
+            res.json(responseObject);
+          });
         });
-
-        // (eventually) update firebase team object's story with experienceTaskTitle & filename
-
-        // Generate new experience
-        Controllers.Experience.generateNextExperienceByTeamId(teamId, newCompletedExperience);
-
-        // send back to client
-        // list of completedExperiences
-        // nextExperience
       });
     });
   });

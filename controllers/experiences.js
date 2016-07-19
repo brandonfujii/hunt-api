@@ -3,7 +3,6 @@ var mongoose = require('mongoose'),
     TaskModel = require('../models/task'),
     geolib = require('geolib'),
     _ = require('underscore');
-
 var TeamController = require('./teams');
 
 // GET /experiences
@@ -41,7 +40,7 @@ module.exports.updateOnVideoUpload = function(userId, fileName, experienceId, ta
   TeamController.getTeamByUserId(userId, cb);
 }
 
-module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedExperience) {
+module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedExperience, cb) {
   TeamController.getTeamById(teamId, function(err, team) {
     if (err) {
       throw err;
@@ -59,15 +58,38 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
             delta: delta
           });
       });
-      console.log(locationDeltas);
+
       var top_3 = _.chain(locationDeltas)
                     .sortBy(function(num) { return num; })
                     .first(3)
                     .value();
-      console.log(top_3);
       var selectedExperience = top_3[Math.floor(Math.random() * top_3.length)];
-      console.log("I choose: ");
-      console.log(selectedExperience);
+
+      TaskModel.Task.find({ experienceId: selectedExperience.experienceId }, function(err, tasks) {
+        if (err) {
+          throw err;
+        }
+
+        var filteredTasks = tasks;  
+        team.experiences.completed.map(function(completedExperience) {
+          filteredTasks = _.filter(tasks, function(task) {
+            return task.experienceId != completedExperience.experienceId;
+          });
+        });
+        
+        if (filteredTasks[0]) {
+          var response = {
+            completed: team.experiences.completed,
+            nextExperience: filteredTasks[0]
+          }
+          cb(response);
+        }
+        else {
+          console.log("No tasks available for this experience");
+          // use other experience?
+        }
+
+      }); 
 
     });
     
