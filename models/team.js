@@ -8,22 +8,32 @@ var teamSchema = mongoose.Schema({
       _id: String
     }
   ],
-  completedExperiences: [
-    {
+  experiences: {
+    completed: [ 
+      new mongoose.Schema({
+
+        experienceId: String,
+        teamId: String,
+        taskTitle: String,
+        filename: String,
+        clue: {
+          title: String,
+          description: String
+        },
+        location: {
+          lat: Number,
+          lon: Number
+        }
+      }, {_id: false})
+    ],
+    nextExperience: {
       experienceId: String,
-      teamId: String,
-      taskTitle: String,
-      filename: String,
-      clue: {
-        title: String,
-        description: String
-      },
-      location: {
-        lat: Number,
-        lon: Number
-      }
+      taskId: String,
+      date: Date,
+      order: Number,
+      filename: String
     }
-  ]
+  }
 });
 
 module.exports = {

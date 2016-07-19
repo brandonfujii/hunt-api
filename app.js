@@ -376,7 +376,6 @@ ExperienceRouter.post('/complete/:_id', function(req, res, next) {
           if (err) {
             throw err;
           }
-          console.log(experience);
           res.json(experience);
         });
 
@@ -441,7 +440,7 @@ app.get('/video/url', function(req, res) {
 
 });
 
-app.get('/videos/:filename', function(req, res) {
+app.get('/video/:filename', function(req, res) {
   res.sendFile('/videos/' + req.params.filename, {root: __dirname});
 });
 

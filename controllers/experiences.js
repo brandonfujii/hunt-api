@@ -44,9 +44,11 @@ module.exports.generateNextExperienceByTeamId = function(teamId) {
       throw err;
     }
 
+    console.log(team.experiences.completed);
+
     // ExperienceModel.Experience.find(function(experiences) {
     //   experiences.map(function() {
-        
+
     //   });
     // });
 
