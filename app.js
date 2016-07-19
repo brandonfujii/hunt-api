@@ -23,6 +23,7 @@ var db = mongoose.connection;
 var HuntRouter = express.Router(),
     UserRouter = express.Router(),
     TeamRouter = express.Router(),
+    TaskRouter = express.Router(),
     ExperienceRouter = express.Router();
 
 // Define home route
@@ -35,6 +36,7 @@ app.use('/api/hunts', HuntRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/teams', TeamRouter);
 app.use('/api/experiences', ExperienceRouter);
+app.use('/api/tasks', TaskRouter);
 
 var Controllers = require('./controllers/init');
 
@@ -50,14 +52,16 @@ app.all('/*', function(req, res, next) {
   }
 });
 
-/* USER ROUTES */
+/* 
+ * User Endpoints
+*/
 // GET /users
 UserRouter.get('/', function(req, res, next) {
-  Controllers.User.getUsers(function(err, user) {
+  Controllers.User.getUsers(function(err, users) {
     if (err) {
       throw err;
     }
-    res.json(user)
+    res.json(users);
   })
 });
 
@@ -94,7 +98,7 @@ UserRouter.put('/:_id', function(req, res) {
   });
 });
 
-// DELETE /users/:id
+// DELETE /teams/:id
 UserRouter.delete('/:_id', function(req, res) {
   var id = req.params._id;
   Controllers.User.deleteUser(id, function(err, user) {
@@ -105,47 +109,285 @@ UserRouter.delete('/:_id', function(req, res) {
   });
 });
 
-/* TEAM ROUTES */
+/*
+ * Team Endpoints
+*/
+// GET /teams
 TeamRouter.get('/', function(req, res, next) {
-  res.send('Teams and shit!');
+  Controllers.Team.getTeams(function(err, teams) {
+    if (err) {
+      throw err;
+    }
+    res.json(teams);
+  })
 });
 
-/* HUNT ROUTES */
+// POST /teams/create
+TeamRouter.post('/create', function(req, res) {
+  var newTeam = req.body;
+  Controllers.Team.addTeam(newTeam, function(err, newTeam) {
+    if (err) {
+      throw err;
+    }
+    res.json(newTeam);
+  })
+});
+
+// GET /teams/:_id
+TeamRouter.get('/:_id', function(req, res) {
+  Controllers.Team.getTeamById(req.params._id, function(err, team) {
+    if (err) {
+      throw err;
+    }
+    res.json(team);
+  });
+});
+
+// PUT /teams/:id
+TeamRouter.put('/:_id', function(req, res) {
+  var id = req.params._id;
+  var team = req.body;
+  Controllers.Team.updateTeam(id, team, {}, function(err, team) {
+    if (err) {
+      throw err;
+    }
+    res.json(team);
+  });
+});
+
+// DELETE /teams/:id
+TeamRouter.delete('/:_id', function(req, res) {
+  var id = req.params._id;
+  Controllers.User.deleteTeam(id, function(err, team) {
+    if (err) {
+      throw err;
+    }
+    res.json(team);
+  });
+});
+
+
+/* 
+* Hunt endpoints 
+*/
+
+// GET /hunts
 HuntRouter.get('/', function(req, res, next) {
-  res.send('Hunts and shit!');
+  Controllers.Hunt.getHunts(function(err, hunts) {
+    if (err) {
+      throw err;
+    }
+    res.json(hunts);
+  });
 });
 
-/* TASK ROUTES */
+// POST /hunts/create
+HuntRouter.post('/create', function(req, res) {
+  var newHunt = req.body;
+  Controllers.Hunt.addHunt(newHunt, function(err, newHunt) {
+    if (err) {
+      throw err;
+    }
+    res.json(newHunt);
+  })
+});
+
+// GET /hunts/:id
+HuntRouter.get('/:_id', function(req, res, next) {
+  Controllers.Hunt.getHuntById(req.params._id, function(err, hunt) {
+    if (err) {
+      throw err;
+    }
+    res.json(hunt);
+  });
+});
+
+// PUT /hunts/:id
+HuntRouter.put('/:_id', function(req, res) {
+  var id = req.params._id;
+  var hunt = req.body;
+  Controllers.Hunt.updateHunt(id, hunt, {}, function(err, hunt) {
+    if (err) {
+      throw err;
+    }
+    res.json(hunt);
+  });
+});
+
+// DELETE /hunts/:id
+HuntRouter.delete('/:_id', function(req, res) {
+  var id = req.params._id;
+  Controllers.Hunt.deleteHunt(id, function(err, hunt) {
+    if (err) {
+      throw err;
+    }
+    res.json(hunt);
+  });
+});
+
+
+/* 
+* Task endpoints
+*/
+
+// GET /tasks
+TaskRouter.get('/', function(req, res, next) {
+  Controllers.Task.getTasks(function(err, tasks) {
+    if (err) {
+      throw err;
+    }
+    res.json(tasks);
+  });
+});
+
+// POST /teams/create
+TaskRouter.post('/create', function(req, res) {
+  var newTask = req.body;
+  Controllers.Task.addTeam(newTask, function(err, newTask) {
+    if (err) {
+      throw err;
+    }
+    res.json(newTask);
+  })
+});
+
+// GET /tasks/:id
+TaskRouter.get('/:_id', function(req, res, next) {
+  Controllers.Task.getTaskById(req.params._id, function(err, task) {
+    if (err) {
+      throw err;
+    }
+    res.json(task);
+  });
+});
+
+// PUT /tasks/:id
+TaskRouter.put('/:_id', function(req, res) {
+  var id = req.params._id;
+  var task = req.body;
+  Controllers.Task.updateTask(id, task, {}, function(err, task) {
+    if (err) {
+      throw err;
+    }
+    res.json(task);
+  });
+});
+
+// DELETE /tasks/:id
+TaskRouter.delete('/:_id', function(req, res) {
+  var id = req.params._id;
+  Controllers.Task.deleteTask(id, function(err, task) {
+    if (err) {
+      throw err;
+    }
+    res.json(task);
+  });
+});
+
+
+/* 
+* Experience endpoints
+*/
+
+// GET /experiences
 ExperienceRouter.get('/', function(req, res, next) {
-  res.send('Tasks and shit!');
+  Controllers.Experience.getExperiences(function(err, experiences) {
+    if (err) {
+      throw err;
+    }
+
+    res.json(experiences);
+  });
 });
 
+// POST /experiences/create
+ExperienceRouter.post('/create', function(req, res) {
+  var newExperience = req.body;
+  Controllers.Experience.addExperience(newExperience, function(err, newExperience) {
+    if (err) {
+      throw err;
+    }
+    res.json(newExperience);
+  })
+});
+
+// GET /experiences/:_id
+ExperienceRouter.get('/:_id', function(req, res) {
+  Controllers.Experience.getExperienceById(req.params._id, function(err, experience) {
+    if (err) {
+      throw err;
+    }
+    res.json(experience);
+  });
+});
+
+// PUT /experiences/:id
+ExperienceRouter.put('/:_id', function(req, res) {
+  var id = req.params._id;
+  var team = req.body;
+  Controllers.Experience.updateExperience(id, experience, {}, function(err, experience) {
+    if (err) {
+      throw err;
+    }
+    res.json(experience);
+  });
+});
+
+// DELETE /experiences/:id
+ExperienceRouter.delete('/:_id', function(req, res) {
+  var id = req.params._id;
+  Controllers.Experience.deleteExperience(id, function(err, experience) {
+    if (err) {
+      throw err;
+    }
+    res.json(experience);
+  });
+});
+
+// COMPLETE - prompts server to update a team's completedExperiences
+//            once a team completes an experience
+// Receives a filename and id's (experience, task, user)
+// => Returns a object w/ updated experiences and the next experience
 ExperienceRouter.post('/complete/:_id', function(req, res, next) {
   var userId = req.body.userId,
+      taskId = req.body.taskId,
       fileName = req.body.filename,
       experienceId = req.params._id;
 
-  Controllers.Experience.updateOnVideoUpload(userId, fileName, experienceId, function(err, team) {
+  Controllers.Experience.updateOnVideoUpload(userId, fileName, experienceId, taskId, function(err, team) {
     var teamId = team._id;
-    var currentCompletedExperiences = team.completedExperiences;
-    
     Controllers.Experience.getExperienceById(experienceId, function(err, experience) {
       var location = experience.location,
-          clue = experience.clue,
-          taskTitle = experience.task.title;
+          clue = experience.clue;
 
-      var newCompletedExperience = {
-        teamId: teamId,
-        filename: fileName,
-        taskTitle: taskTitle,
-        clue: clue,
-        location: location
-      };
+      Controllers.Task.getTaskById(taskId, function(err, task) {
+        var taskTitle = task.title;
+        var newCompletedExperience = {
+            teamId: teamId,
+            filename: fileName,
+            taskTitle: taskTitle,
+            clue: clue,
+            location: location
+        };
 
-      currentCompletedExperiences = currentCompletedExperiences.concat([newCompletedExperience]);
-      res.json(currentCompletedExperiences);
+        // Update the team object's completedExperiences (byTeamId)
+        Controllers.Team.updateCompletedExperiencesById(teamId, newCompletedExperience, {}, function(err, experience) {
+          if (err) {
+            throw err;
+          }
+          res.json(experience);
+        });
+
+        // (eventually) update firebase team object's story with experienceTaskTitle & filename
+
+        // Generate new experience
+        Controllers.Experience.generateNextExperienceByTeamId(teamId);
+        
+        // send back to client
+        // list of completedExperiences
+        // nextExperience
+      });
     });
-
   });
 });
 

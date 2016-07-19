@@ -9,10 +9,6 @@ var experienceSchema = mongoose.Schema({
   clue: {
     title: String,
     description: String
-  },
-  task: {
-    title: String,
-    description: String
   }
 });
 

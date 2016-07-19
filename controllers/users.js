@@ -38,8 +38,7 @@ module.exports.updateUser = function(id, user, options, cb) {
   var updated_user = {
     name: user.name,
     teamId: user.teamId,
-    points: user.points,
-    checkpoints: user.checkpoints
+    points: user.points
   };
   UserModel.User.findOneAndUpdate(query, updated_user, options, cb);
 }

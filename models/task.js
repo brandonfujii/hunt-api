@@ -1,11 +1,9 @@
 var mongoose = require('mongoose');
 
 var taskSchema = mongoose.Schema({
-  location: {
-    lat: Number,
-    lon: Number,
-    name: String
-  }
+  experienceId: String,
+  title: String,
+  description: String
 });
 
 module.exports = {
