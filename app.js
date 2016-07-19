@@ -382,7 +382,7 @@ ExperienceRouter.post('/complete/:_id', function(req, res, next) {
         // (eventually) update firebase team object's story with experienceTaskTitle & filename
 
         // Generate new experience
-        Controllers.Experience.generateNextExperienceByTeamId(teamId);
+        Controllers.Experience.generateNextExperienceByTeamId(teamId, newCompletedExperience);
 
         // send back to client
         // list of completedExperiences

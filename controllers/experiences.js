@@ -1,5 +1,8 @@
 var mongoose = require('mongoose'),
-    ExperienceModel = require('../models/experience');
+    ExperienceModel = require('../models/experience'),
+    TaskModel = require('../models/task'),
+    geolib = require('geolib'),
+    _ = require('underscore');
 
 var TeamController = require('./teams');
 
@@ -38,13 +41,36 @@ module.exports.updateOnVideoUpload = function(userId, fileName, experienceId, ta
   TeamController.getTeamByUserId(userId, cb);
 }
 
-module.exports.generateNextExperienceByTeamId = function(teamId) {
+module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedExperience) {
   TeamController.getTeamById(teamId, function(err, team) {
     if (err) {
       throw err;
     }
 
-    console.log(team.experiences.completed);
+    ExperienceModel.Experience.find(function(err, experiences) {
+      var currLocation = currCompletedExperience.location;
+      var locationDeltas = [];
+      experiences.map(function(experience) {
+        var delta = geolib.getDistance(currLocation, experience.location);
+
+        locationDeltas.push({
+            experienceId: experience._id,
+            location: experience.location,
+            delta: delta
+          });
+      });
+      console.log(locationDeltas);
+      var top_3 = _.chain(locationDeltas)
+                    .sortBy(function(num) { return num; })
+                    .first(3)
+                    .value();
+      console.log(top_3);
+      var selectedExperience = top_3[Math.floor(Math.random() * top_3.length)];
+      console.log("I choose: ");
+      console.log(selectedExperience);
+
+    });
+    
 
     // ExperienceModel.Experience.find(function(experiences) {
     //   experiences.map(function() {
