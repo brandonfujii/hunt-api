@@ -19,6 +19,8 @@ var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_DB);
 var db = mongoose.connection;
 
+var firebaseApp = require('./utils/firebase');
+
 // Define controller routers
 var HuntRouter = express.Router(),
     UserRouter = express.Router(),
@@ -28,7 +30,7 @@ var HuntRouter = express.Router(),
 
 // Define home route
 app.get('/', function(req, res, next) {
-  res.sendFile('index.html', {root: __dirname });
+  res.sendFile('index.html', { root: __dirname });
 });
 
 // Define controller routes
