@@ -1,6 +1,7 @@
 var express        = require('express'),
     TeamRouter     = express.Router(),
-    TeamController = require('../controllers/teams');
+    TeamController = require('../controllers/teams'),
+    firebaseApp    = require('../utils/firebase');
 
 // GET /teams
 TeamRouter.get('/', function(req, res, next) {
@@ -36,12 +37,13 @@ TeamRouter.get('/:_id', function(req, res) {
 // PUT /teams/:id
 TeamRouter.put('/:_id', function(req, res) {
   var id = req.params._id;
-  var team = req.body;
-  TeamController.updateTeam(id, team, {}, function(err, team) {
+  var changes = req.body;
+
+  TeamController.updateTeam(id, changes, function(err) {
     if (err) {
       res.send(err);
     }
-    res.json(team);
+    res.json({ status: true });
   });
 });
 
@@ -52,7 +54,7 @@ TeamRouter.delete('/:_id', function(req, res) {
     if (err) {
       res.send(err);
     }
-    res.json(team);
+    res.json({ status: true });
   });
 });
 

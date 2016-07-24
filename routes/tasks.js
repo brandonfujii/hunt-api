@@ -36,12 +36,13 @@ TaskRouter.get('/:_id', function(req, res, next) {
 // PUT /tasks/:id
 TaskRouter.put('/:_id', function(req, res) {
   var id = req.params._id;
-  var task = req.body;
-  TaskController.updateTask(id, task, {}, function(err, task) {
+  var changes = req.body;
+
+  TaskController.updateTask(id, changes, function(err) {
     if (err) {
       res.send(err);
     }
-    res.json(task);
+    res.json({ status: true });
   });
 });
 
@@ -52,7 +53,7 @@ TaskRouter.delete('/:_id', function(req, res) {
     if (err) {
       res.send(err);
     }
-    res.json(task);
+    res.json({ status: true });
   });
 });
 

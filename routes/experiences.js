@@ -3,7 +3,7 @@ var express              = require('express'),
     ExperienceController = require('../controllers/experiences'),
     TaskController       = require('../controllers/tasks'),
     TeamController       = require('../controllers/teams'),
-    Experience           = require('../models/experience');
+    Experience           = require('../models/experience'); 
 
 // GET /experiences
 ExperienceRouter.get('/', function(req, res, next) {
@@ -40,11 +40,13 @@ ExperienceRouter.get('/:_id', function(req, res) {
 // PUT /experiences/:id
 ExperienceRouter.put('/:_id', function(req, res) {
   var id = req.params._id;
-  var team = req.body;
-  ExperienceController.updateExperience(id, experience, {}, function(err, experience) {
+  var changes = req.body;
+
+  ExperienceController.updateExperience(id, changes, function(err, experience) {
     if (err) {
       res.send(err);
     }
+    console.log(experience);
     res.json(experience);
   });
 });
@@ -56,7 +58,7 @@ ExperienceRouter.delete('/:_id', function(req, res) {
     if (err) {
       res.send(err);
     }
-    res.json(experience);
+    res.json({ status : true });
   });
 });
 
@@ -100,6 +102,7 @@ ExperienceRouter.post('/complete/:_id', function(req, res, next) {
           }
 
           ExperienceController.generateNextExperienceByTeamId(teamId, newCompletedExperience, function(responseObject) {
+
             res.json(responseObject);
           });
         });

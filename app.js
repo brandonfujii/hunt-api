@@ -105,6 +105,6 @@ app.get('/video/:filename', function(req, res) {
 });
 
 // Start Server
-var port = process.env.PORT || 1738;
+var port = process.env.DEV_PORT || 1738;
 app.listen(port);
 console.log('Express is currently running on port ' + port);

@@ -20,6 +20,4 @@ var huntSchema = mongoose.Schema({
   ]
 });
 
-module.exports = {
-  Hunt: mongoose.model('Hunt', huntSchema)
-}
+module.exports = mongoose.model('Hunt', huntSchema)

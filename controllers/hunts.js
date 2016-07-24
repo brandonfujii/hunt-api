@@ -1,40 +1,39 @@
-var mongoose = require('mongoose'),
-    HuntModel = require('../models/hunt');
+var mongoose  = require('mongoose'),
+    Hunt = require('../models/hunt'),
+    _lib      = require('../_lib/src');
 
 // GET /hunts
 module.exports.getHunts = function(cb, limit) {
-  HuntModel.Hunt.find(cb).limit(limit);
+  Hunt.find(cb).limit(limit);
 }
 
 // GET /hunts/:id
-module.exports.getUserById = function(id, cb) {
-  HuntModel.Hunt.findById(id, cb);
+module.exports.getHuntById = function(id, cb) {
+  Hunt.findById(id, cb);
 }
 
 // POST /hunts
 module.exports.addHunt = function(hunt, cb) {
-  HuntModel.Hunt.create(user, cb);
+  Hunt.create(hunt, cb);
 }
 
 // DELETE /users/:id
-module.exports.deleteUser = function(id, cb) {
+module.exports.deleteHunt = function(id, cb) {
   var query = { _id: id };
-  HuntModel.Hunt.remove(query, cb);
+  Hunt.remove(query, cb);
 }
 
 // UPDATE /users/:id
-module.exports.updateUser = function(id, hunt, options, cb) {
-  var query = { _id: id };
-  var updated_hunt = {
-    startDate: hunt.startDate,
-    endDate: hunt.endDate,
-    teams: hunt.teams,
-    users: hunt.users,
-    tasks: hunt.tasks
-  };
-  HuntModel.Hunt.findOneAndUpdate(query, updated_hunt, options, cb);
+module.exports.updateHunt = function(id, changes, cb) {
+  Hunt.findById(id, function(err, hunt) {
+    if (err) {
+      res.send(err);
+    }
+    var flattenedChanges = _lib.flattenObject(changes);
+    Hunt.update(hunt, { $set: flattenedChanges }, cb);
+  });
 }
 
 module.exports.getHuntTasks = function() {
-  return HuntModel.Hunt.find('tasks');
+  return Hunt.find('tasks');
 }

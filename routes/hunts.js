@@ -36,23 +36,23 @@ HuntRouter.get('/:_id', function(req, res, next) {
 // PUT /hunts/:id
 HuntRouter.put('/:_id', function(req, res) {
   var id = req.params._id;
-  var hunt = req.body;
-  HuntController.updateHunt(id, hunt, {}, function(err, hunt) {
+  var changes = req.body;
+  HuntController.updateHunt(id, changes, function(err) {
     if (err) {
       res.send(err);
     }
-    res.json(hunt);
+    res.json({ status: true });
   });
 });
 
 // DELETE /hunts/:id
 HuntRouter.delete('/:_id', function(req, res) {
   var id = req.params._id;
-  HuntController.deleteHunt(id, function(err, hunt) {
+  HuntController.deleteHunt(id, function(err) {
     if (err) {
       res.send(err);
     }
-    res.json(hunt);
+    res.json({ status: true });
   });
 });
 

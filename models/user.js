@@ -6,6 +6,4 @@ var userSchema = mongoose.Schema({
   points: Number
 });
 
-module.exports = {
-  User: mongoose.model('User', userSchema)
-}
+module.exports = mongoose.model('User', userSchema)

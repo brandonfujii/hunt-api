@@ -6,6 +6,4 @@ var taskSchema = mongoose.Schema({
   description: String
 });
 
-module.exports = {
-  Task: mongoose.model('Task', taskSchema)
-}
+module.exports = mongoose.model('Task', taskSchema);

@@ -36,12 +36,13 @@ UserRouter.get('/:_id', function(req, res) {
 // PUT /users/:id
 UserRouter.put('/:_id', function(req, res) {
   var id = req.params._id;
-  var user = req.body;
-  UserController.updateUser(id, user, {}, function(err, user) {
+  var changes = req.body;
+
+  UserController.updateUser(id, changes, function(err) {
     if (err) {
       res.send(err);
     }
-    res.json(user);
+    res.json({ status: true });
   });
 });
 
@@ -52,7 +53,7 @@ UserRouter.delete('/:_id', function(req, res) {
     if (err) {
       res.send(err);
     }
-    res.json(user);
+    res.json({ status: true });
   });
 });
 
