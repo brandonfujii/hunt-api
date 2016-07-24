@@ -8,6 +8,7 @@ var exec = require('child_process').exec;
 var ENV_VARIABLES = [
     'MONGO_DB',
     'PROJECT_ID',
+    'CLIENT_EMAIL',
     'PRIVATE_KEY',
     'DATABASE_URL'
 ];
