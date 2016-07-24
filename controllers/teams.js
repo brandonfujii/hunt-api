@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-    Team = require('../models/team');
+    Team     = require('../models/team'),
+    _lib     = require('../_lib/src');
 
 // GET /teams
 module.exports.getTeams = function(cb, limit) {
@@ -30,18 +31,11 @@ module.exports.deleteTeam = function(id, cb) {
 // UPDATE /teams/:id
 module.exports.updateTeam = function(id, changes, cb) {
   Team.findById(id, function(err, team) {
-    console.log(team);
     if (err) {
       res.send(err);
     }
-
-    for (key in changes) {
-      console.log(key);
-      if (changes.hasOwnProperty(key)) {
-        team[key] = changes[key];
-      }
-    }
-    team.save(cb);
+    var flattenedChanges = _lib.flattenObject(changes);
+    Team.update(team, { $set: flattenedChanges }, cb);
   });
 }
 
