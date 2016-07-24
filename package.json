@@ -1,6 +1,9 @@
 {
   "name": "hunt",
   "version": "1.0.0",
+  "engines": {
+      "node": "4.4.7"
+  },
   "description": "A scavenger hunt app for hackNY",
   "main": "app.js",
   "scripts": {
