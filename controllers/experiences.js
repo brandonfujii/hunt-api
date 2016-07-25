@@ -52,7 +52,18 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
     Experience.find(function(err, experiences) {
       var currLocation = currCompletedExperience.location;
       var locationDeltas = [];
-      experiences.map(function(experience) {
+
+      var experienceIds = team.experiences.completed.map(function(experience) {
+        return experience.experienceId;
+      });
+
+      // only work with locations the current team hasn't gone to
+      var filteredExperiences = _.filter(experiences, function(experience) {
+        return !_.contains(experienceIds, experience._id);
+      });
+
+
+      filteredExperiences.map(function(experience) {
         var delta = geolib.getDistance(currLocation, experience.location);
 
         locationDeltas.push({
@@ -63,33 +74,54 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
       });
 
       var top_3 = _.chain(locationDeltas)
-                    .sortBy(function(num) { return num; })
+                    .sortBy(function(location) { return location.delta; })
                     .first(3)
                     .value();
       var selectedExperience = top_3[Math.floor(Math.random() * top_3.length)];
 
-      TaskModel.Task.find({ experienceId: selectedExperience.experienceId }, function(err, tasks) {
+
+      // find all tasks
+      // pick a task that hasn't been completed before by current team
+
+      // changed this to find all tasks
+      // TODO change to do the filter in the query 
+      TaskModel.Task.find(function(err, tasks) {
         if (err) {
           throw err;
         }
 
-        var filteredTasks = tasks;  
-        team.experiences.completed.map(function(completedExperience) {
-          filteredTasks = _.filter(tasks, function(task) {
-            return task.experienceId != completedExperience.experienceId;
-          });
+        var taskIds = team.experiences.completed.map(function(task) {
+          return task.taskId;
         });
+
+        var filteredTasks = _.filter(tasks, function(task) {
+          return !_.contains(taskIds, task._id);
+        });
+
+        // need to update task schema so that tasks are not tied to an experience 
         
         if (filteredTasks[0]) {
+
+          // build next experience 
+          // & save (replace/update) that to team experiences.next (make sure it's this in the schema)
+          // return team.experiences to cb to send back to client
+
+          var nextExperience; // build here
+
           var response = {
             completed: team.experiences.completed,
-            nextExperience: filteredTasks[0]
-          }
+            next: nextExperience
+          };
+
+
           cb(response);
         }
         else {
           console.log("No tasks available for this experience");
           // use other experience?
+          //
+          // it shouldn't hit this during actual use, we'll need to build in setting a 
+          // limit of how many experiences they complete and then not reach here if we already hit that 
         }
 
       }); 
