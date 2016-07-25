@@ -102,22 +102,40 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
         
         if (filteredTasks[0]) {
 
+          var nextTask = filteredTasks[0];
+
           // build next experience 
           // & save (replace/update) that to team experiences.next (make sure it's this in the schema)
           // return team.experiences to cb to send back to client
 
-          var nextExperience; // build here
+          // need to figure out order 
+          var nextCount = team.experiences.completed.length + 1;
 
-          var response = {
-            completed: team.experiences.completed,
-            next: nextExperience
+          var nextExperience = {
+            experienceId: selectedExperience._id,
+            teamId: team._id,
+            task: filteredTasks[0],
+            clue: selectedExperience.clue,
+            location: selectedExperience.location,
+            order: nextCount,
+            filename: null,
+            dateCompleted: null
           };
 
+          // should we update the whole team object or just the team.experiences.next object  
+          Team.findOneAndUpdate({'_id': team._id}, {'experiences.next': nextExperience}, {upsert: true}, function(err, doc){
 
-          cb(response);
+            console.log(doc);
+
+            // see if this is returning the full experiences doc with completed and next 
+
+            cb(doc.experiences);
+          });
+
         }
         else {
           console.log("No tasks available for this experience");
+          cb({err: "No tasks available"});
           // use other experience?
           //
           // it shouldn't hit this during actual use, we'll need to build in setting a 
