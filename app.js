@@ -29,7 +29,7 @@ var db = mongoose.connection;
 var firebaseApp = require('./utils/firebase');
 
 // Define routes
-var ExperienceRouter = require('./routes/experiences'),
+var LocationRouter   = require('./routes/locations'),
     HuntRouter       = require('./routes/hunts'),
     UserRouter       = require('./routes/users'),
     TeamRouter       = require('./routes/teams'),
@@ -39,7 +39,7 @@ var ExperienceRouter = require('./routes/experiences'),
 app.use('/api/hunts', HuntRouter);
 app.use('/api/users', UserRouter);
 app.use('/api/teams', TeamRouter);
-app.use('/api/experiences', ExperienceRouter);
+app.use('/api/locations', LocationRouter);
 app.use('/api/tasks', TaskRouter);
 
 // Define home route
@@ -57,58 +57,6 @@ app.all('/*', function(req, res, next) {
   } else {
       next();
   }
-});
-
-/* Sample task */
-app.get('/sample', function(req, res, next) {
-  res.json(
-    [
-      {
-        location: {
-          lat: 40.733855, 
-          lon: -73.989643,
-          name: "Location name"
-        },
-        clue: {
-          title: "HackMIT",
-          description: "Think Fast. It will all add up."
-        },
-        task: {
-          title: "Some Task Title 1",
-          description: "Some Task Description"
-        }
-      },
-      {
-        location: {
-          lat: 40.733643, 
-          lon: -73.987862,
-          name: "Location name 2: Electric Boogaloo"
-        },
-        clue: {
-          title: "NYU Palladium Hall",
-          description: "Find something to do here."
-        },
-        task: {
-          title: "Some Task Title 2: Electric Boogaloo",
-          description: "Some Task Description"
-        }
-      }
-    ]
-  );
-});
-
-app.get('/video/url', function(req, res) {
-  const filename = 'saveForSlicing.mp4';
-
-  res.send({
-    team: 'someTeamId',
-    filename: filename
-  });
-
-});
-
-app.get('/video/:filename', function(req, res) {
-  res.sendFile('/videos/' + req.params.filename, {root: __dirname});
 });
 
 // Start Server

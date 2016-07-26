@@ -1,6 +1,7 @@
 var express        = require('express'),
     TeamRouter     = express.Router(),
     TeamController = require('../controllers/teams'),
+    TaskController = require('../controllers/tasks'),
     firebaseApp    = require('../utils/firebase');
 
 // GET /teams
@@ -55,6 +56,52 @@ TeamRouter.delete('/:_id', function(req, res) {
       res.send(err);
     }
     res.json({ status: true });
+  });
+});
+
+// COMPLETE /complete/:id
+TeamRouter.post('/complete/:_id', function(req, res, next) {
+  var userId       = req.body.userId,
+      taskId       = req.body.taskId,
+      fileName     = req.body.filename,
+      experienceId = req.params._id;
+
+  LocationController.updateOnVideoUpload(userId, fileName, experienceId, taskId, function(err, team) {
+    if (err) {
+      res.send(err);
+    }
+    var teamId = team._id;
+    LocationController.getExperienceById(experienceId, function(err, experience) {
+      var location = experience.location,
+          clue = experience.clue;
+
+      TaskController.getTaskById(taskId, function(err, task) {
+        if (err) {
+          res.send(err);
+        }
+        var taskTitle = task.title;
+        var newCompletedExperience = {
+            experienceId: experienceId,
+            teamId: teamId,
+            filename: fileName,
+            taskTitle: taskTitle,
+            clue: clue,
+            location: location
+        };
+
+        // Update the team object's completedExperiences (byTeamId)
+        TeamController.updateCompletedExperiencesById(teamId, newCompletedExperience, {}, function(err, experience) {
+          if (err) {
+            res.send(err);
+          }
+
+          TeamController.generateNextExperienceByTeamId(teamId, newCompletedExperience, function(responseObject) {
+
+            res.json(responseObject);
+          });
+        });
+      });
+    });
   });
 });
 

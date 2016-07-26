@@ -1,5 +1,5 @@
 var mongoose  = require('mongoose'),
-    Hunt = require('../models/hunt'),
+    Hunt      = require('../models/hunt'),
     _lib      = require('../_lib/src');
 
 // GET /hunts

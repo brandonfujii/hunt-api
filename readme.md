@@ -4,7 +4,7 @@ A snapchat-like app for scavenger hunts
 ### Models
 - Users
 - Teams
-- Experiences
+- Locations
 - Tasks
 - Hunts
 

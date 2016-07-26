@@ -1,39 +1,33 @@
 var mongoose = require('mongoose');
 
 var experienceSchema = new mongoose.Schema({
-
-    experienceId: String,
     teamId: String,
     task: {
-      id: String,
+      taskId: String,
       title: String,
       description: String
     },
     filename: String,
-    clue: {
-      title: String,
-      description: String
-    },
     location: {
+      locationId: String,
       lat: Number,
-      lon: Number
+      lon: Number,
+      clueDescription: String
     },
     order: Number,
-    dateCompleted: String
+    dateCompleted: Date
   }, 
   { _id: false }
 );
-
-
-// for above, don't think we need the teamId 
-// and for the nextExperience, the dateCompleted and filename will be null 
 
 var teamSchema = mongoose.Schema({
   name: String,
   points: Number,
   users: [
     {
-      _id: String
+      _id: String,
+      name: String,
+      teamId: String
     }
   ],
   experiences: {
