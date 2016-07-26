@@ -1,19 +1,18 @@
 var mongoose = require('mongoose');
 
 var experienceSchema = new mongoose.Schema({
-    teamId: String,
     task: {
       taskId: String,
       title: String,
       description: String
     },
-    filename: String,
     location: {
       locationId: String,
       lat: Number,
       lon: Number,
       clueDescription: String
     },
+    filename: String,
     order: Number,
     dateCompleted: Date
   }, 

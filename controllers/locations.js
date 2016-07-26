@@ -1,5 +1,5 @@
 var mongoose        = require('mongoose'),
-    LocationModel   = require('../models/Location'),
+    LocationModel   = require('../models/location'),
     TaskModel       = require('../models/task'),
     geolib          = require('geolib'),
     TeamController  = require('./teams'),

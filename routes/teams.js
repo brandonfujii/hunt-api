@@ -66,7 +66,7 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       fileName     = req.body.filename,
       experienceId = req.params._id;
 
-  LocationController.updateOnVideoUpload(userId, fileName, experienceId, taskId, function(err, team) {
+  TeamController.updateOnVideoUpload(userId, fileName, experienceId, taskId, function(err, team) {
     if (err) {
       res.send(err);
     }

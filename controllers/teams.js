@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     Team     = require('../models/team'),
-    _lib     = require('../_lib/src');
+    _lib     = require('../_lib/src'),
+    LocationModel = require('../models/location');
 
 // GET /teams
 module.exports.getTeams = function(cb, limit) {
@@ -52,42 +53,55 @@ module.exports.updateCompletedExperiencesById = function(id, newExperience, opti
     }, options, cb);
 }
 
-module.exports.generateNextLocationByTeamId = function(teamId, currCompletedLocation, cb) {
+var selectRandomElement = function(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedExperience, cb) {
   TeamController.getTeamById(teamId, function(err, team) {
     if (err) {
       throw err;
     }
 
-    Location.find(function(err, locations) {
-      var currLocation = currCompletedLocation.location;
+    LocationModel.find(function(err, locations) {
+      var currLocation = currCompletedExperience.location;
       var locationDeltas = [];
 
-      var LocationIds = team.Locations.completed.map(function(Location) {
-        return Location.LocationId;
+      var completedLocationIds = team.experiences.completed.map(function(experience) {
+        return experience.location.locationId;
       });
 
       // only work with locations the current team hasn't gone to
-      var filteredLocations = _.filter(Locations, function(Location) {
-        return !_.contains(LocationIds, Location._id);
+      var filteredLocations = _.filter(locations, function(location) {
+        return !_.contains(completedLocationIds, location._id);
       });
 
 
-      filteredLocations.map(function(Location) {
-        var delta = geolib.getDistance(currLocation, Location.location);
+      filteredLocations.map(function(location) {
+        var userCoordinates = {
+          lat: currLocation.lat,
+          lon: currLocation.lon
+        };
 
+        var locationCoordinates = {
+          lat: location.lat,
+          lon: location.lon
+        };
+
+        var delta = geolib.getDistance(userCoordinates, locationCoordinates);
         locationDeltas.push({
-            LocationId: Location._id,
-            location: Location.location,
+            locationObj: location,
             delta: delta
           });
       });
 
       var top_3 = _.chain(locationDeltas)
-                    .sortBy(function(location) { return location.delta; })
+                    .sortBy(function(locationDelta) { return locationDelta.delta; })
                     .first(3)
                     .value();
-      var selectedLocation = top_3[Math.floor(Math.random() * top_3.length)];
 
+      var selectedLocationDelta = selectRandomElement(top_3);
+      var selectedLocation = selectedLocationDelta.locationObj;
 
       // find all tasks
       // pick a task that hasn't been completed before by current team
@@ -99,47 +113,47 @@ module.exports.generateNextLocationByTeamId = function(teamId, currCompletedLoca
           throw err;
         }
 
-        var taskIds = team.Locations.completed.map(function(task) {
-          return task.taskId;
+        var completedTaskIds = team.experiences.completed.map(function(experience) {
+          return experience.task.taskId;
         });
 
         var filteredTasks = _.filter(tasks, function(task) {
-          return !_.contains(taskIds, task._id);
+          return !_.contains(completedTaskIds, task._id);
         });
 
-        // need to update task schema so that tasks are not tied to an Location 
-        
         if (filteredTasks[0]) {
 
-          var nextTask = filteredTasks[0];
+          var selectedTask = selectRandomElement(filteredTasks);
 
           // build next Location 
           // & save (replace/update) that to team Locations.next (make sure it's this in the schema)
           // return team.Locations to cb to send back to client
 
           // need to figure out order 
-          var nextCount = team.Locations.completed.length + 1;
+          var order = team.experiences.completed.length + 1;
 
-          var nextLocation = {
-            LocationId: selectedLocation._id,
+          var nextExperience = {
             teamId: team._id,
-            task: filteredTasks[0],
-            clue: selectedLocation.clue,
-            location: selectedLocation.location,
-            order: nextCount,
+            task: selectedTask,
+            location: selectedLocation,
+            order: order,
             filename: null,
             dateCompleted: null
           };
 
           // should we update the whole team object or just the team.Locations.next object  
-          Team.findOneAndUpdate({'_id': team._id}, {'Locations.next': nextLocation}, {upsert: true}, function(err, doc){
+          var locationChanges = {
+            experiences: {
+              next: nextExperience
+            }
+          }
+          updateTeam(teamId, locationChanges, function(err) {
+            if (err) {
+              cb({ err: "Cannot update team!" });
+            }
 
-            console.log(doc);
 
-            // see if this is returning the full Locations doc with completed and next 
-
-            cb(doc.Locations);
-          });
+          })
 
         }
         else {
@@ -151,20 +165,6 @@ module.exports.generateNextLocationByTeamId = function(teamId, currCompletedLoca
         }
 
       }); 
-
     });
-    
-
-    // Location.find(function(Locations) {
-    //   Locations.map(function() {
-
-    //   });
-    // });
-
-
-     // get task for a particular Location
-          // that they haven't done yet
-        // get location (pick one of the three closest)
-      
   });
 }
