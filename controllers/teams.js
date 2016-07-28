@@ -82,6 +82,8 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
         throw err;
       }
 
+      console.log(locations);
+
       if (currCompletedExperience.location) {
         var currLocation = currCompletedExperience.location;
       }
