@@ -97,6 +97,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
 
 
       filteredLocations.map(function(location) {
+        console.log(location);
         var userCoordinates = {
           lat: currLocation.lat,
           lon: currLocation.lon
@@ -116,7 +117,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
 
       var top_3 = _.chain(locationDeltas)
                     .sortBy(function(locationDelta) { return locationDelta.delta; })
-                    .first(3)
+                    .first(Math.min(3, locationDeltas.length))
                     .value();
 
       var selectedLocationDelta = selectRandomElement(top_3);
