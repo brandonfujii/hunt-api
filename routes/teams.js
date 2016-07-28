@@ -61,6 +61,7 @@ TeamRouter.delete('/:_id', function(req, res) {
 
 // COMPLETE /complete/:id
 TeamRouter.post('/complete/:_id', function(req, res, next) {
+  console.log(req);
   var experienceId = req.body.experienceId,
       fileName     = req.body.filename,
       teamId       = req.params._id;

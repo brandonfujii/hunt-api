@@ -80,10 +80,12 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
       if (err) {
         throw err;
       }
-      
-      var currLocation = currCompletedExperience.location;
-      var locationDeltas = [];
 
+      if (currCompletedExperience.location) {
+        var currLocation = currCompletedExperience.location;
+      }
+
+      var locationDeltas = [];
       var completedLocationIds = team.experiences.completed.map(function(experience) {
         return experience.location.locationId;
       });
