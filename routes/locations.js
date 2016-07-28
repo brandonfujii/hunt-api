@@ -18,12 +18,12 @@ LocationRouter.get('/', function(req, res, next) {
 
 // POST /locations/create
 LocationRouter.post('/create', function(req, res) {
-  var newExperience = req.body;
+  var newLocation = req.body;
   LocationController.addLocation(newLocation, function(err, newLocation) {
     if (err) {
       res.send(err);
     }
-    res.json(newExperience);
+    res.json(newLocation);
   })
 });
 
@@ -37,7 +37,7 @@ LocationRouter.get('/:_id', function(req, res) {
   });
 });
 
-// PUT /experiences/:id
+// PUT /locations/:id
 LocationRouter.put('/:_id', function(req, res) {
   var id = req.params._id;
   var changes = req.body;

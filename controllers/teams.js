@@ -1,7 +1,11 @@
-var mongoose = require('mongoose'),
-    Team     = require('../models/team'),
-    _lib     = require('../_lib/src'),
-    LocationModel = require('../models/location');
+var mongoose      = require('mongoose'),
+    Team          = require('../models/team'),
+    _             = require('underscore'),
+    geolib        = require('geolib'),
+    _lib          = require('../_lib/src'),
+    LocationModel = require('../models/location'),
+    Task          = require('../models/task'),
+    ObjectID      = require('bson-objectid');
 
 // GET /teams
 module.exports.getTeams = function(cb, limit) {
@@ -29,6 +33,19 @@ module.exports.deleteTeam = function(id, cb) {
   Team.remove(query, cb);
 }
 
+// REPLACE/OVERWRITE team by ID
+module.exports.replaceTeam = function(id, team, options, cb) {
+  var query = { _id: id };
+  var updated_team = {
+    name: team.name,
+    points: team.points,
+    users: team.users,
+    experiences: team.experiences
+  };
+  Team.findOneAndUpdate(query, updated_team, options, cb);
+}
+
+
 // UPDATE /teams/:id
 module.exports.updateTeam = function(id, changes, cb) {
   Team.findById(id, function(err, team) {
@@ -36,14 +53,10 @@ module.exports.updateTeam = function(id, changes, cb) {
       res.send(err);
     }
     var flattenedChanges = _lib.flattenObject(changes);
-    Team.update(team, { $set: flattenedChanges }, cb);
+    console.log(flattenedChanges);
+    // Team.update(team, { $set: flattenedChanges }, cb);
   });
 }
-
-module.exports.updateOnVideoUpload = function(userId, fileName, LocationId, taskId, cb) {
-  TeamController.getTeamByUserId(userId, cb);
-}
-
 
 // UPDATE /teams/:id > completedExperiences
 module.exports.updateCompletedExperiencesById = function(id, newExperience, options, cb) {
@@ -58,7 +71,7 @@ var selectRandomElement = function(arr) {
 }
 
 module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedExperience, cb) {
-  TeamController.getTeamById(teamId, function(err, team) {
+  this.getTeamById(teamId, function(err, team) {
     if (err) {
       throw err;
     }
@@ -108,8 +121,9 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
 
       // changed this to find all tasks
       // TODO change to do the filter in the query 
-      TaskModel.Task.find(function(err, tasks) {
+      Task.find(function(err, tasks) {
         if (err) {
+          console.log("Could not find task!");
           throw err;
         }
 
@@ -133,6 +147,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
           var order = team.experiences.completed.length + 1;
 
           var nextExperience = {
+            _id: ObjectID(),
             teamId: team._id,
             task: selectedTask,
             location: selectedLocation,
@@ -147,21 +162,12 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
               next: nextExperience
             }
           }
-          updateTeam(teamId, locationChanges, function(err) {
-            if (err) {
-              cb({ err: "Cannot update team!" });
-            }
 
-
-          })
+          cb(null, nextExperience);
 
         }
         else {
-          cb({err: "No tasks available"});
-          // use other Location?
-          //
-          // it shouldn't hit this during actual use, we'll need to build in setting a 
-          // limit of how many Locations they complete and then not reach here if we already hit that 
+          cb({ err: "No tasks available" });
         }
 
       }); 

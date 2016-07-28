@@ -15,9 +15,7 @@ var experienceSchema = new mongoose.Schema({
     filename: String,
     order: Number,
     dateCompleted: Date
-  }, 
-  { _id: false }
-);
+});
 
 var teamSchema = mongoose.Schema({
   name: String,

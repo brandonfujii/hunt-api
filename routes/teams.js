@@ -61,48 +61,77 @@ TeamRouter.delete('/:_id', function(req, res) {
 
 // COMPLETE /complete/:id
 TeamRouter.post('/complete/:_id', function(req, res, next) {
-  var userId       = req.body.userId,
-      taskId       = req.body.taskId,
+  var experienceId = req.body.experienceId,
       fileName     = req.body.filename,
-      experienceId = req.params._id;
+      teamId       = req.params._id;
 
-  TeamController.updateOnVideoUpload(userId, fileName, experienceId, taskId, function(err, team) {
+  // get TEAM
+  TeamController.getTeamById(teamId, function(err, team) {
     if (err) {
       res.send(err);
     }
-    var teamId = team._id;
-    LocationController.getExperienceById(experienceId, function(err, experience) {
-      var location = experience.location,
-          clue = experience.clue;
+    else {
+      var completedExperience = team.experiences.next,
+          currentStory        = team.experiences.completed;
 
-      TaskController.getTaskById(taskId, function(err, task) {
-        if (err) {
-          res.send(err);
-        }
-        var taskTitle = task.title;
-        var newCompletedExperience = {
-            experienceId: experienceId,
-            teamId: teamId,
-            filename: fileName,
-            taskTitle: taskTitle,
-            clue: clue,
-            location: location
-        };
+      var updatedExperience = {
+        _id: completedExperience._id,
+        task: completedExperience.task,
+        location: completedExperience.location,
+        filename: fileName,
+        order: completedExperience.order,
+        dateCompleted: Date.now()
+      }
 
-        // Update the team object's completedExperiences (byTeamId)
-        TeamController.updateCompletedExperiencesById(teamId, newCompletedExperience, {}, function(err, experience) {
-          if (err) {
-            res.send(err);
-          }
+      var updatedStory = currentStory.concat([updatedExperience]);
+      var updatedTeam = team;
+      updatedTeam['experiences']['completed'] = updatedStory;
 
-          TeamController.generateNextExperienceByTeamId(teamId, newCompletedExperience, function(responseObject) {
-
-            res.json(responseObject);
+      TeamController.generateNextExperienceByTeamId(teamId, completedExperience, function(err, nextExperience) {
+        updatedTeam['experiences']['next'] = nextExperience;
+        
+        TeamController.replaceTeam(teamId, updatedTeam, {}, function(err, team) {
+          TeamController.getTeams(function(err, teams) {
+            res.json(teams);
           });
         });
       });
-    });
+
+    }
   });
+
 });
+
+//   LocationController.getExperienceById(experienceId, function(err, experience) {
+//     var location = experience.location,
+//         clue = experience.clue;
+
+//     TaskController.getTaskById(taskId, function(err, task) {
+//       if (err) {
+//         res.send(err);
+//       }
+//       var taskTitle = task.title;
+//       var newCompletedExperience = {
+//           experienceId: experienceId,
+//           teamId: teamId,
+//           filename: fileName,
+//           taskTitle: taskTitle,
+//           clue: clue,
+//           location: location
+//       };
+
+//       // Update the team object's completedExperiences (byTeamId)
+//       TeamController.updateCompletedExperiencesById(teamId, newCompletedExperience, {}, function(err, experience) {
+//         if (err) {
+//           res.send(err);
+//         }
+
+//         TeamController.generateNextExperienceByTeamId(teamId, newCompletedExperience, function(responseObject) {
+//           res.json(responseObject);
+//         });
+//       });
+//     });
+//   });
+// });
 
 module.exports = TeamRouter;
