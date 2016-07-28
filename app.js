@@ -14,6 +14,8 @@
 var express = require('express');
 var app = express();
 
+console.log(process.env);
+
 // Reveal those beautiful requests and errors
 var logger = require('morgan');
 app.use(logger('dev'));
