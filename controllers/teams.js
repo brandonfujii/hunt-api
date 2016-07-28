@@ -78,6 +78,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
 
     LocationModel.find(function(err, locations) {
       if (err) {
+        console.log("No locations found!");
         throw err;
       }
 
@@ -94,7 +95,8 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
       var filteredLocations = _.filter(locations, function(location) {
         return !_.contains(completedLocationIds, location._id);
       });
-
+      console.log("this is filtered locations: ");
+      console.log(filteredLocations.length);
 
       filteredLocations.map(function(location) {
         console.log(location);
@@ -110,11 +112,10 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
 
         var delta = geolib.getDistance(userCoordinates, locationCoordinates);
         locationDeltas.push({
-            locationObj: location,
-            delta: delta
-          });
+          locationObj: location,
+          delta: delta
+        });
       });
-      console.log(locationDeltas.length)
 
       var top_3 = _.chain(locationDeltas)
                     .sortBy(function(locationDelta) { return locationDelta.delta; })
