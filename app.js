@@ -4,7 +4,7 @@
 //     // on PROD, no worries
 //     console.log('No environment file?');
 // });
-// 
+
 // d.run(function(){
 //     // Allow for environment variable usage
 //     require('dotenv').config();
@@ -13,8 +13,6 @@
 // Initialize express framework
 var express = require('express');
 var app = express();
-
-console.log(process.env);
 
 // Reveal those beautiful requests and errors
 var logger = require('morgan');

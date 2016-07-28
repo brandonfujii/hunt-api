@@ -77,6 +77,10 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
     }
 
     LocationModel.find(function(err, locations) {
+      if (err) {
+        throw err;
+      }
+      
       var currLocation = currCompletedExperience.location;
       var locationDeltas = [];
 
@@ -155,13 +159,6 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
             filename: null,
             dateCompleted: null
           };
-
-          // should we update the whole team object or just the team.Locations.next object  
-          var locationChanges = {
-            experiences: {
-              next: nextExperience
-            }
-          }
 
           cb(null, nextExperience);
 

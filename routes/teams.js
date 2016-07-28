@@ -96,7 +96,6 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
           });
         });
       });
-
     }
   });
 

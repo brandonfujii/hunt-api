@@ -50,7 +50,7 @@ LocationRouter.put('/:_id', function(req, res) {
   });
 });
 
-// DELETE /experiences/:id
+// DELETE /location/:id
 LocationRouter.delete('/:_id', function(req, res) {
   var id = req.params._id;
   LocationController.deleteLocation(id, function(err, location) {
