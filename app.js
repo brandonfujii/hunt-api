@@ -1,3 +1,4 @@
+require('dotenv').config({silent: true})
 // var d = require('domain').create();
 // d.on('error', function(err){
 //     // this is because there is no '.env'
