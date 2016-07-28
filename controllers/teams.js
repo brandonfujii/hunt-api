@@ -114,6 +114,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
             delta: delta
           });
       });
+      console.log(locationDeltas.length)
 
       var top_3 = _.chain(locationDeltas)
                     .sortBy(function(locationDelta) { return locationDelta.delta; })
