@@ -1,9 +1,9 @@
-var d = require('domain').create();
-d.on('error', function(err){
-    // this is because there is no '.env'
-    // on PROD, no worries
-    console.log('No environment file?');
-});
+// var d = require('domain').create();
+// d.on('error', function(err){
+//     // this is because there is no '.env'
+//     // on PROD, no worries
+//     console.log('No environment file?');
+// });
 
 // d.run(function(){
 //     // Allow for environment variable usage
