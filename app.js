@@ -22,6 +22,8 @@ app.use(logger('dev'));
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+var jwt = require('jsonwebtoken');
+var expressJwt = require('express-jwt');
 
 // Connect to MongoDB
 var mongoose = require('mongoose');
@@ -56,10 +58,29 @@ app.all('/*', function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
     if (req.method == 'OPTIONS') {
       res.status(200).end();
-  } else {
+    } else {
       next();
-  }
+    }
 });
+
+// app.use('/api/*', expressJwt({ secret: process.env.JWT_SECRET }));
+
+// // use a middleware function to ensure that only admin can access /applications endpoints
+// app.use('/applications', function(req, res, next) {
+//   var token = req.headers.authorization.split(' ')[1];
+//   var user = jwt.decode(token);
+//   var userEmail = user.email ? user.email : user._doc.email;
+//   console.log(userEmail)
+//   // Signing in as an application
+//   // var user = jwt.decode(token)._doc;
+//   if (userEmail == process.env.ADMIN_EMAIL) {
+//     next();
+//   } else {
+//     // Unauthorized status
+//     return res.sendStatus(403)
+//   }
+// });
+
 
 // Start Server
 var port = process.env.PORT || 1738;

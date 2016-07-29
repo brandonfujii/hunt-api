@@ -94,14 +94,12 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
       });
 
       // only work with locations the current team hasn't gone to
-      var filteredLocations = _.filter(locations, function(location) {
-        return !_.contains(completedLocationIds, location._id);
-      });
-      console.log("this is filtered locations: ");
-      console.log(filteredLocations.length);
+      // var filteredLocations = _.filter(locations, function(location) {
+      //   return !_.contains(completedLocationIds, location._id);
+      // });
 
-      filteredLocations.map(function(location) {
-        console.log(location);
+      // change back to filteredLocations
+      locations.map(function(location) {
         var userCoordinates = {
           lat: currLocation.lat,
           lon: currLocation.lon
