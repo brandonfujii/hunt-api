@@ -2,6 +2,7 @@ var express        = require('express'),
     TeamRouter     = express.Router(),
     TeamController = require('../controllers/teams'),
     TaskController = require('../controllers/tasks'),
+    ObjectID       = require('bson-objectid');
     firebaseApp    = require('../utils/firebase');
 
 // GET /teams
@@ -92,45 +93,14 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
         
         TeamController.replaceTeam(teamId, updatedTeam, {}, function(err, team) {
           TeamController.getTeams(function(err, teams) {
+            firebaseApp.database().ref('teams/' + teamId + '/refreshTeam').set(ObjectID());
             res.json(teams);
           });
         });
       });
     }
   });
-
 });
 
-//   LocationController.getExperienceById(experienceId, function(err, experience) {
-//     var location = experience.location,
-//         clue = experience.clue;
-
-//     TaskController.getTaskById(taskId, function(err, task) {
-//       if (err) {
-//         res.send(err);
-//       }
-//       var taskTitle = task.title;
-//       var newCompletedExperience = {
-//           experienceId: experienceId,
-//           teamId: teamId,
-//           filename: fileName,
-//           taskTitle: taskTitle,
-//           clue: clue,
-//           location: location
-//       };
-
-//       // Update the team object's completedExperiences (byTeamId)
-//       TeamController.updateCompletedExperiencesById(teamId, newCompletedExperience, {}, function(err, experience) {
-//         if (err) {
-//           res.send(err);
-//         }
-
-//         TeamController.generateNextExperienceByTeamId(teamId, newCompletedExperience, function(responseObject) {
-//           res.json(responseObject);
-//         });
-//       });
-//     });
-//   });
-// });
 
 module.exports = TeamRouter;

@@ -17,13 +17,13 @@ module.exports.addHunt = function(hunt, cb) {
   Hunt.create(hunt, cb);
 }
 
-// DELETE /users/:id
+// DELETE /hunts/:id
 module.exports.deleteHunt = function(id, cb) {
   var query = { _id: id };
   Hunt.remove(query, cb);
 }
 
-// UPDATE /users/:id
+// UPDATE /hunts/:id
 module.exports.updateHunt = function(id, changes, cb) {
   Hunt.findById(id, function(err, hunt) {
     if (err) {
@@ -32,8 +32,4 @@ module.exports.updateHunt = function(id, changes, cb) {
     var flattenedChanges = _lib.flattenObject(changes);
     Hunt.update(hunt, { $set: flattenedChanges }, cb);
   });
-}
-
-module.exports.getHuntTasks = function() {
-  return Hunt.find('tasks');
 }
