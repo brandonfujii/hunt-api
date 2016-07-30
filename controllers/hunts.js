@@ -14,7 +14,7 @@ module.exports.getHuntById = function(id, cb) {
 
 // GET /hunts/team/:id
 module.exports.getHuntByTeamId = function(teamId, cb) {
-  Hunt.find({ teams: teamId }).limit(1);
+  Hunt.find({ teams: teamId }, cb).limit(1);
 }
 
 // POST /hunts

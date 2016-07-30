@@ -29,6 +29,7 @@ HuntRouter.get('/team/:_id', function(req, res) {
     if (err) {
       throw err;
     }
+    console.log(hunt)
     res.json(hunt);
   });
 });
