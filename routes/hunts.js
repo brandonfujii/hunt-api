@@ -1,6 +1,9 @@
 var express        = require('express'),
     HuntRouter     = express.Router(),
-    HuntController = require('../controllers/hunts');
+    HuntController = require('../controllers/hunts'),
+    TeamController = require('../controllers/teams'),
+    ObjectID       = require('bson-objectid'),
+    firebaseApp    = require('../utils/firebase');
 
 // GET /hunts
 HuntRouter.get('/', function(req, res, next) {
@@ -54,6 +57,42 @@ HuntRouter.delete('/:_id', function(req, res) {
     }
     res.json({ status: true });
   });
+});
+
+// Start Hunt /hunts/start/:id
+HuntRouter.post('/start/:_id', function(req, res) {
+  var id            = req.params._id,
+      isGameStarted = req.body.isGameStarted,
+      currLocation  = req.body.location;
+
+  if (!isGameStarted) {
+    HuntController.getHuntById(id, function(err, hunt) {
+      if (err) {
+        res.send({ "error" : 'Could not find hunt'});
+      }
+
+      if (hunt.teams) {
+        hunt.teams.map(function(team) {
+          var teamId = team._id;
+          TeamController.generateInitialExperience(teamId, currLocation, function(err, nextExperience, currentTeam) {
+            var updatedTeam = currentTeam;
+            updatedTeam['experiences']['next'] = nextExperience;
+
+            TeamController.replaceTeam(teamId, updatedTeam, {}, function(err, team) {
+              firebaseApp.database().ref('teams/' + teamId + '/refreshTeam').set(ObjectID());
+              console.log("Team Updated");
+            });
+          });
+        });
+
+        res.send({ "isGameStarted" : true });
+      } else {
+        res.send({ "error" : "No teams are participating in this hunt!"});
+      }
+    });
+  } else {
+    res.send({ "error" : 'Sorry, the hunt has already started!'});
+  }
 });
 
 module.exports = HuntRouter;

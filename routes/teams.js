@@ -2,7 +2,7 @@ var express        = require('express'),
     TeamRouter     = express.Router(),
     TeamController = require('../controllers/teams'),
     TaskController = require('../controllers/tasks'),
-    ObjectID       = require('bson-objectid');
+    ObjectID       = require('bson-objectid'),
     firebaseApp    = require('../utils/firebase');
 
 // GET /teams
