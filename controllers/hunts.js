@@ -12,6 +12,11 @@ module.exports.getHuntById = function(id, cb) {
   Hunt.findById(id, cb);
 }
 
+// GET /hunts/team/:id
+module.exports.getHuntByTeamId = function(teamId, cb) {
+  Hunt.find({ teams: teamId }, cb).limit(1);
+}
+
 // POST /hunts
 module.exports.addHunt = function(hunt, cb) {
   Hunt.create(hunt, cb);

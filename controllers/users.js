@@ -16,10 +16,6 @@ module.exports.getUsers = function(cb, limit) {
 // GET /users/:id
 module.exports.getUserById = function(id, cb) {
   User.findById(id, cb);
-  HuntController.getHuntTasks()
-    .then(function(tasks) {
-      console.log(tasks);
-    });
 }
 
 // ADD user
