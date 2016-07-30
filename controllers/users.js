@@ -24,7 +24,16 @@ module.exports.getUserById = function(id, cb) {
 
 // ADD user
 module.exports.addUser = function(user, cb) {
-  User.create(user, cb);
+  var facebookId = user.fbId;
+  User.find({ fbId: facebookId }, function(err, users) {
+    if (!users.length) {
+      User.create(user, cb);
+    }
+    else {
+      cb({ "error" : "User already exists!"});
+    }
+  });
+  
 }
 
 // DELETE /users/:id
