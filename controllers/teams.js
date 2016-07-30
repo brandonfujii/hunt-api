@@ -17,11 +17,6 @@ module.exports.getTeamById = function(id, cb) {
   Team.findById(id, cb);
 }
 
-// GET /teams/:userID
-module.exports.getTeamByUserId = function(id, cb) {
-  return Team.findOne({'users._id': {$in: [id]}}, cb);
-}
-
 // POST /teams
 module.exports.addTeam = function(team, cb) {
   Team.create(team, cb);
