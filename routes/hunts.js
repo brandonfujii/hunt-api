@@ -83,8 +83,8 @@ HuntRouter.post('/start/:_id', function(req, res) {
       }
 
       if (hunt.teams) {
-        hunt.teams.map(function(team) {
-          var teamId = team._id;
+        hunt.teams.map(function(team_id) {
+          var teamId = team_id;
           TeamController.generateInitialExperience(teamId, currLocation, function(err, nextExperience, currentTeam) {
             var updatedTeam = currentTeam;
             updatedTeam['experiences']['next'] = nextExperience;
