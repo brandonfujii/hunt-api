@@ -23,6 +23,16 @@ HuntRouter.post('/create', function(req, res) {
   })
 });
 
+// GET /hunts/team/:id
+HuntRouter.get('/team/:_id', function(req, res) {
+  HuntController.getHuntByTeamId(req.params._id, function(err, hunt) {
+    if (err) {
+      throw err;
+    }
+    res.json(hunt);
+  });
+});
+
 // GET /hunts/:id
 HuntRouter.get('/:_id', function(req, res, next) {
   HuntController.getHuntById(req.params._id, function(err, hunt) {
