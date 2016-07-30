@@ -9,7 +9,7 @@ var mongoose      = require('mongoose'),
 
 // GET /teams
 module.exports.getTeams = function(cb, limit) {
-  Team.find(cb).limit(limit);
+  Team.find(cb).limit(limit).sort('points');
 }
 
 // GET /teams/:id
