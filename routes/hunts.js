@@ -86,10 +86,17 @@ HuntRouter.post('/start/:_id', function(req, res) {
         hunt.teams.map(function(team_id) {
           var teamId = team_id;
           TeamController.generateInitialExperience(teamId, currLocation, function(err, nextExperience, currentTeam) {
+            if (err) {
+              res.send("Could not generate initial experience for team");
+            }
             var updatedTeam = currentTeam;
             updatedTeam['experiences']['next'] = nextExperience;
 
             TeamController.replaceTeam(teamId, updatedTeam, {}, function(err, team) {
+              if (err) {
+                res.send("Could not update team");
+              }
+
               firebaseApp.database().ref('teams/' + teamId + '/refreshTeam').set(ObjectID());
               console.log("Team Updated");
             });
