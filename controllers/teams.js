@@ -203,19 +203,20 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
 
             // select a task specific to one of the top locations, if possible
             var locationSpecificTasks = _.filter(filteredTasks, function(task) {
+                var isGood = false;
                 top_3.forEach(function(location) {
-                    if(_.contains(task.locationId, location._id)) {
-                        return true;
+                    if(_.contains(task.locationId, location.locationObj._id.toString())) {
+                        isGood =  true;
                     }
                 });
-                return false;
+                return isGood;
             });
 
             if(!_.isEmpty(locationSpecificTasks)) {
                 selectedTask = selectRandomElement(locationSpecificTasks);
                 selectedLocation = _.find(top_3, function(location) {
-                    return _.contains(selectedTask.locationId, location._id);
-                });
+                    return _.contains(selectedTask.locationId, location.locationObj._id.toString());
+                }).locationObj;
             }
             else {
                 selectedTask = selectRandomElement(filteredTasks);
