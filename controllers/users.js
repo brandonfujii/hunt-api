@@ -30,7 +30,7 @@ module.exports.addUser = function(user, cb) {
       User.create(user, cb);
     }
     else {
-      cb({ "error" : "This user already exists!"});
+      cb(users[0]);
     }
 
   });
