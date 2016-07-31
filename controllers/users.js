@@ -31,7 +31,6 @@ module.exports.addUser = function(user, cb) {
       User.create(user, cb);
     } 
     else {
-      console.log("duped");
       cb(users[0]);
     }
   });

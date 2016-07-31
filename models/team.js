@@ -12,6 +12,7 @@ var experienceSchema = new mongoose.Schema({
       lat: Number,
       lon: Number,
       name: String,
+      radius: Number,
       clueDescription: String
     },
     filename: String,
