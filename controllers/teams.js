@@ -231,7 +231,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
             // return team.Locations to cb to send back to client
 
             // need to figure out order 
-            var order = team.experiences.completed.length + 1;
+            var order = team.experiences.next.order + 1;
 
             var nextExperience = {
               _id: ObjectID(),
