@@ -183,9 +183,6 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
                       .first(Math.min(3, locationDeltas.length))
                       .value();
 
-        var selectedLocationDelta = selectRandomElement(top_3);
-        var selectedLocation = selectedLocationDelta.locationObj;
-
         Task.find(function(err, tasks) {
           if (err) {
             console.log("Could not find task!");
@@ -201,8 +198,29 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
           });
 
           if (filteredTasks[0]) {
+            var selectedLocation = null;
+            var selectedTask = null;
 
-            var selectedTask = selectRandomElement(filteredTasks);
+            // select a task specific to one of the top locations, if possible
+            var locationSpecificTasks = _.filter(filteredTasks, function(task) {
+                top_3.forEach(function(location) {
+                    if(_.contains(task.locationId, location._id)) {
+                        return true;
+                    }
+                });
+                return false;
+            });
+
+            if(!_.isEmpty(locationSpecificTasks)) {
+                selectedTask = selectRandomElement(locationSpecificTasks);
+                selectedLocation = _.find(top_3, function(location) {
+                    return _.contains(selectedTask.locationId, location._id);
+                });
+            }
+            else {
+                selectedTask = selectRandomElement(filteredTasks);
+                selectedLocation = selectRandomElement(top_3).locationObj;
+            }
 
             // build next Location 
             // & save (replace/update) that to team Locations.next (make sure it's this in the schema)
