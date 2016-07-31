@@ -10,7 +10,7 @@ var _ = require('underscore');
 
 // GET /users
 module.exports.getUsers = function(cb, limit) {
-  User.find(cb).limit(limit);
+  User.find(cb).limit(limit).sort('points');
 }
 
 // GET /users/:id
