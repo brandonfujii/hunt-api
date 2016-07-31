@@ -20,21 +20,7 @@ module.exports.getUserById = function(id, cb) {
 
 // ADD user
 module.exports.addUser = function(user, cb) {
-  var facebookId = user.fbId;
-  User.find({ fbId: facebookId }, function(err, users) {
-    if (err) {
-      throw err;
-    }
-
-    if (!users.length) {
-      User.create(user, cb);
-    }
-    else {
-      cb(users[0]);
-    }
-
-  });
-  
+  User.create(user, cb);
 }
 
 // DELETE /users/:id
