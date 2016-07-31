@@ -220,7 +220,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
             }
             else {
                 var generalTasks = _.filter(filteredTasks, function(task) {
-                    return _.isEmpty(task.locationObj); 
+                    return _.isEmpty(task.locationId); 
                 });
                 selectedTask = selectRandomElement(generalTasks);
                 selectedLocation = selectRandomElement(top_3).locationObj;
