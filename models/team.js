@@ -4,7 +4,8 @@ var experienceSchema = new mongoose.Schema({
     task: {
       taskId: String,
       title: String,
-      description: String
+      description: String,
+      points: Number
     },
     location: {
       locationId: String,
