@@ -219,7 +219,10 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
                 }).locationObj;
             }
             else {
-                selectedTask = selectRandomElement(filteredTasks);
+                var generalTasks = _.filter(filteredTasks, function(task) {
+                    return _.isEmpty(task.locationObj); 
+                });
+                selectedTask = selectRandomElement(generalTasks);
                 selectedLocation = selectRandomElement(top_3).locationObj;
             }
 
