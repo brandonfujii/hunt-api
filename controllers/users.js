@@ -10,7 +10,7 @@ var _ = require('underscore');
 
 // GET /users
 module.exports.getUsers = function(cb, limit) {
-  User.find(cb).limit(limit).sort('points');
+  User.find(cb).limit(limit);
 }
 
 // GET /users/:id
@@ -20,7 +20,21 @@ module.exports.getUserById = function(id, cb) {
 
 // ADD user
 module.exports.addUser = function(user, cb) {
-  User.create(user, cb);
+  var fbEmail = user.email;
+
+  User.find({ email: fbEmail }, function(err, users) {
+    if (err) {
+      throw err;
+    }
+
+    if (!users.length) {
+      User.create(user, cb);
+    } 
+    else {
+      console.log("duped");
+      cb(users[0]);
+    }
+  });
 }
 
 // DELETE /users/:id
