@@ -20,9 +20,9 @@ module.exports.getUserById = function(id, cb) {
 
 // ADD user
 module.exports.addUser = function(user, cb) {
-  var fbEmail = user.email;
+  var username = user.name;
 
-  User.find({ email: fbEmail }, function(err, users) {
+  User.find({ name: username }, function(err, users) {
     if (err) {
       throw err;
     }
