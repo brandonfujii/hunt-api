@@ -176,15 +176,10 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
           return experience.location._id;
         });
 
-        console.log("COMPLETED LOCATION IDS");
-        console.log(completedLocationIds);
         // only work with locations the current team hasn't gone to
         var filteredLocations = _.filter(locations, function(location) {
           return !_.contains(completedLocationIds, location._id.toString());
         });
-
-        console.log("FILTERED LOCATIONS");
-        console.log(filteredLocations);
 
         // change back to filteredLocations
         filteredLocations.map(function(location) {
@@ -227,7 +222,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
           });
 
           var filteredTasks = _.filter(tasks, function(task) {
-            return !_.contains(completedTaskIds, task._id);
+            return !_.contains(completedTaskIds, task._id.toString());
           });
 
           if (filteredTasks[0]) {
