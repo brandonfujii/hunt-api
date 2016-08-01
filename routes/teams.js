@@ -101,13 +101,13 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       var dateDiff = currentDate.getTime() - lastDate.getTime();
       var minutesDiff = Math.round(((dateDiff % 86400000) % 3600000) / 60000);
       var pointsGiven;
-      
+
       if (minutesDiff <= 10 ) {
         pointsGiven = 20;
       } else if (minutesDiff >= 60) {
         pointsGiven = 10;
       } else {
-        taskGiven = completedExperience.task.points * ( minutesDiff / 100);
+        taskGiven = completedExperience.task.points * ( minutesDiff / 60);
       }
 
       // dev team gets no points
