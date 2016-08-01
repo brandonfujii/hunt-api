@@ -7,14 +7,14 @@ var express        = require('express'),
     _              = require('underscore');
 
 // GET /teams
-// TeamRouter.get('/', function(req, res, next) {
-//   TeamController.getTeams(function(err, teams) {
-//     if (err) {
-//       res.send(err);
-//     }
-//     res.json(teams);
-//   })
-// });
+TeamRouter.get('/', function(req, res, next) {
+  TeamController.getTeams(function(err, teams) {
+    if (err) {
+      res.send(err);
+    }
+    res.json(teams);
+  })
+});
 
 // POST /teams/create
 TeamRouter.post('/create', function(req, res) {
