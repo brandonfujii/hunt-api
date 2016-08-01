@@ -91,8 +91,27 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       var updatedTeam = team;
       updatedTeam['experiences']['completed'] = updatedStory;
 
+      var recentExperience = _.chain(team.experiences.completed)
+                .sortBy(function(exp) { return exp.dateCompleted; })
+                .last()
+                .value();
+      var currentDate = new Date(Date.now());
+      var lastDate = new Date(recentExperience.dateCompleted.$date);
+
+      var dateDiff = currentDate.getTime() - lastDate.getTime();
+      var minutesDiff = Math.round(((dateDiff % 86400000) % 3600000) / 60000);
+      var pointsGiven;
+      
+      if (minutesDiff <= 10 ) {
+        pointsGiven = 20;
+      } else if (minutesDiff >= 60) {
+        pointsGiven = 10;
+      } else {
+        taskGiven = completedExperience.task.points * ( minutesDiff / 100);
+      }
+
       // dev team gets no points
-      updatedTeam.points += (updatedTeam.name.toLowerCase() === 'updates') ? 0 : completedExperience.task.points;
+      updatedTeam.points += (updatedTeam.name.toLowerCase() === 'updates') ? 0 : pointsGiven;
 
       TeamController.generateNextExperienceByTeamId(teamId, completedExperience, function(err, nextExperience) {
         updatedTeam['experiences']['next'] = nextExperience;
