@@ -3,9 +3,9 @@ var mongoose = require('mongoose'),
     _lib = require('../_lib/src');
 
 // GET /tasks 
-// module.exports.getTasks = function(cb, limit) {
-//   Task.find(cb).limit(limit);
-// }
+module.exports.getTasks = function(cb, limit) {
+  Task.find(cb).limit(limit);
+}
 
 // GET /tasks/:id
 module.exports.getTaskById = function(id, cb) {

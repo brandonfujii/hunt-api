@@ -5,15 +5,15 @@ var express        = require('express'),
     ObjectID       = require('bson-objectid'),
     firebaseApp    = require('../utils/firebase');
 
-// GET /hunts
-HuntRouter.get('/', function(req, res, next) {
-  HuntController.getHunts(function(err, hunts) {
-    if (err) {
-      res.send(err);
-    }
-    res.json(hunts);
-  });
-});
+// // GET /hunts
+// HuntRouter.get('/', function(req, res, next) {
+//   HuntController.getHunts(function(err, hunts) {
+//     if (err) {
+//       res.send(err);
+//     }
+//     res.json(hunts);
+//   });
+// });
 
 // POST /hunts/create
 HuntRouter.post('/create', function(req, res) {

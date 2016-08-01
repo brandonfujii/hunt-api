@@ -8,9 +8,9 @@ var mongoose        = require('mongoose'),
 
 
 // GET /locations
-// module.exports.getLocations = function(cb, limit) {
-//   LocationModel.find(cb).limit(limit);
-// }
+module.exports.getLocations = function(cb, limit) {
+  LocationModel.find(cb).limit(limit);
+}
 
 // GET /locations/:id
 module.exports.getLocationById = function(id, cb) {

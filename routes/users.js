@@ -3,14 +3,14 @@ var express        = require('express'),
     UserController = require('../controllers/users');
 
 // GET /users
-UserRouter.get('/', function(req, res, next) {
-  UserController.getUsers(function(err, users) {
-    if (err) {
-      res.send(err);
-    }
-    res.json(users);
-  })
-});
+// UserRouter.get('/', function(req, res, next) {
+//   UserController.getUsers(function(err, users) {
+//     if (err) {
+//       res.send(err);
+//     }
+//     res.json(users);
+//   })
+// });
 
 // POST /users/create
 UserRouter.post('/create', function(req, res) {
