@@ -9,7 +9,7 @@ var experienceSchema = new mongoose.Schema({
       locationId: [String]
     },
     location: {
-      locationId: String,
+      _id: String,
       lat: Number,
       lon: Number,
       name: String,

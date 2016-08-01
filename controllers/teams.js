@@ -154,13 +154,18 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
         var completedExperiences = team.experiences.completed.concat();
         completedExperiences.push(currCompletedExperience);
         var completedLocationIds = completedExperiences.map(function(experience) {
-          return experience.location.locationId;
+          return experience.location._id;
         });
 
+        console.log("COMPLETED LOCATION IDS");
+        console.log(completedLocationIds);
         // only work with locations the current team hasn't gone to
         var filteredLocations = _.filter(locations, function(location) {
           return !_.contains(completedLocationIds, location._id.toString());
         });
+
+        console.log("FILTERED LOCATIONS");
+        console.log(filteredLocations);
 
         // change back to filteredLocations
         filteredLocations.map(function(location) {
@@ -229,11 +234,6 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
                 selectedLocation = selectRandomElement(top_3).locationObj;
             }
 
-            // build next Location 
-            // & save (replace/update) that to team Locations.next (make sure it's this in the schema)
-            // return team.Locations to cb to send back to client
-
-            // need to figure out order 
             var order = team.experiences.next.order + 1;
 
             var nextExperience = {
