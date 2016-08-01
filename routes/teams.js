@@ -3,7 +3,8 @@ var express        = require('express'),
     TeamController = require('../controllers/teams'),
     TaskController = require('../controllers/tasks'),
     ObjectID       = require('bson-objectid'),
-    firebaseApp    = require('../utils/firebase');
+    firebaseApp    = require('../utils/firebase'),
+    _              = require('underscore');
 
 // GET /teams
 TeamRouter.get('/', function(req, res, next) {
