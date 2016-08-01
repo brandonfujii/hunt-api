@@ -223,7 +223,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
           }
 
           var completedTaskIds = team.experiences.completed.map(function(experience) {
-            return experience.task.taskId;
+            return experience.task._id;
           });
 
           var filteredTasks = _.filter(tasks, function(task) {
