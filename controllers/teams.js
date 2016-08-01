@@ -211,7 +211,9 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
                       .value();
 
         if(_.isEmpty(top_3)) {
+            console.log("NO MORE TASKS");
             cb(null, FINAL_TASK);
+            return;
         }
 
         Task.find(function(err, tasks) {
