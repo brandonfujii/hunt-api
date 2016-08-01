@@ -97,35 +97,27 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       var updatedTeam = team;
       updatedTeam['experiences']['completed'] = updatedStory;
 
-      // var recentExperience = _.chain(team.experiences.completed)
-      //           .sortBy(function(exp) { return exp.dateCompleted; })
-      //           .last()
-      //           .value();
-      // var currentDate = new Date(Date.now());
-      // console.log("CURRENT DATE");
-      // console.log(currentDate)
-      // var lastDate = new Date(recentExperience.dateCompleted);
-      // console.log("LAST DATE");
-      // console.log(recentExperience.dateCompleted);
-      // console.log(lastDate);
-      // var dateDiff = currentDate.getTime() - lastDate.getTime();
+      var recentExperience = _.chain(team.experiences.completed)
+                .sortBy(function(exp) { return exp.dateCompleted; })
+                .last()
+                .value();
+      var currentDate = new Date(Date.now());
+      var lastDate = new Date(recentExperience.dateCompleted);
+      var dateDiff = currentDate.getTime() - lastDate.getTime();
 
-      // var minutesDiff = Math.round(((dateDiff % 86400000) % 3600000) / 60000);
-      // var pointsGiven;
+      var minutesDiff = Math.round(((dateDiff % 86400000) % 3600000) / 60000);
+      var pointsGiven;
 
-      // if (minutesDiff <= 10 ) {
-      //   pointsGiven = 20;
-      // } else if (minutesDiff >= 60) {
-      //   pointsGiven = 10;
-      // } else {
-      //   pointsGiven = completedExperience.task.points * (minutesDiff / 60);
-      // }
-
-      // console.log("POINTS GIVEN");
-      // console.log(pointsGiven);
-      // dev team gets no points
-      
-      updatedTeam.points += (updatedTeam.name.toLowerCase() === 'updates') ? 0 : completedExperience.task.points;
+      if (minutesDiff <= 10 ) {
+        pointsGiven = 20;
+      } else if (minutesDiff >= 60) {
+        pointsGiven = 10;
+      } else {
+        pointsGiven = Math.floor(completedExperience.task.points * (minutesDiff / 60));
+      }
+    
+      // updatedTeam.points += (updatedTeam.name.toLowerCase() === 'updates') ? 0 : pointsGiven;
+      updatedTeam.points += pointsGiven;
 
       TeamController.generateNextExperienceByTeamId(teamId, completedExperience, function(err, nextExperience) {
         updatedTeam['experiences']['next'] = nextExperience;
