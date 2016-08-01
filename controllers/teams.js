@@ -151,7 +151,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
 
         var locationDeltas = [];
 
-        var completedExperiences = teams.experiences.completed.concat();
+        var completedExperiences = team.experiences.completed.concat();
         completedExperiences.push(currCompletedExperience);
         var completedLocationIds = completedExperiences.map(function(experience) {
           return experience.location.locationId;
