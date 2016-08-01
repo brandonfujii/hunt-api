@@ -71,7 +71,10 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
     if (err) {
       res.send(err);
     }
-    else {
+
+    if (experienceId != team.experiences.next._id.toString()) {
+      res.json(teams);
+    } else {
       var completedExperience = team.experiences.next,
           currentStory        = team.experiences.completed;
 

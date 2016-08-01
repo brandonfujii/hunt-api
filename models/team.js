@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var experienceSchema = new mongoose.Schema({
     task: {
-      taskId: String,
+      _id: String,
       title: String,
       description: String,
       points: Number,
