@@ -108,14 +108,18 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       var minutesDiff = Math.round(currentDate.getTime() - lastDate.getTime()) / 60000;
       var pointsGiven;
 
+      var basePoints = completedExperience.task.points;
+      var maxBonusPoints = 10;
+
       if (minutesDiff <= 10 ) {
-        pointsGiven = 20;
+          pointsGiven = basePoints + maxBonusPoints;
       } else if (minutesDiff >= 60) {
-        pointsGiven = 10;
+          pointsGiven = basePoints;
       } else {
-        pointsGiven = Math.floor(completedExperience.task.points * (minutesDiff / 60));
+          var bonusPointsToDeduct = Math.floor(maxBonusPoints * (minutesDiff / 60));
+          pointsGiven = basePoints + (maxBonusPoints - bonusPointsToDeduct);
       }
-    
+          
       // updatedTeam.points += (updatedTeam.name.toLowerCase() === 'updates') ? 0 : pointsGiven;
       updatedTeam.points += pointsGiven;
 
