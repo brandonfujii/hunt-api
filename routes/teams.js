@@ -70,11 +70,16 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
   // get TEAM
   TeamController.getTeamById(teamId, function(err, team) {
     if (err) {
-      res.send(err);
+      res.send({ error: "Cannot get team"});
     }
 
     if (experienceId != team.experiences.next._id.toString()) {
-      res.json(teams);
+      TeamController.getTeams(function(err, teams) {
+        if (err) {
+          res.send({ error: 'Cannot return teams'});
+        }
+        res.json(teams);
+      }); 
     } else {
       var completedExperience = team.experiences.next,
           currentStory        = team.experiences.completed;
@@ -127,6 +132,9 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
         
         TeamController.replaceTeam(teamId, updatedTeam, {}, function(err, team) {
           TeamController.getTeams(function(err, teams) {
+            if (err) {
+              res.send({ error: 'Cannot return teams'});
+            }
             firebaseApp.database().ref('teams/' + teamId + '/refreshTeam').set(ObjectID());
             res.json(teams);
           });
