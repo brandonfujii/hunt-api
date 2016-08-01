@@ -150,13 +150,16 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
         var currLocation = currCompletedExperience.location;
 
         var locationDeltas = [];
-        var completedLocationIds = team.experiences.completed.map(function(experience) {
+
+        var completedExperiences = teams.experiences.completed.concat();
+        completedExperiences.push(currCompletedExperience);
+        var completedLocationIds = completedExperiences.map(function(experience) {
           return experience.location.locationId;
         });
 
         // only work with locations the current team hasn't gone to
         var filteredLocations = _.filter(locations, function(location) {
-          return !_.contains(completedLocationIds, location._id);
+          return !_.contains(completedLocationIds, location._id.toString());
         });
 
         // change back to filteredLocations
