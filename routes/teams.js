@@ -110,7 +110,7 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       } else {
         taskGiven = completedExperience.task.points * ( minutesDiff / 60);
       }
-
+      console.log(pointsGiven);
       // dev team gets no points
       // (updatedTeam.name.toLowerCase() === 'updates') ? 0 : 
       updatedTeam.points += pointsGiven;
