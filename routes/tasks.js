@@ -3,14 +3,14 @@ var express        = require('express'),
     TaskController = require('../controllers/tasks');
 
 // GET /tasks
-TaskRouter.get('/', function(req, res, next) {
-  TaskController.getTasks(function(err, tasks) {
-    if (err) {
-      res.send(err);
-    }
-    res.json(tasks);
-  });
-});
+// TaskRouter.get('/', function(req, res, next) {
+//   TaskController.getTasks(function(err, tasks) {
+//     if (err) {
+//       res.send(err);
+//     }
+//     res.json(tasks);
+//   });
+// });
 
 // POST /teams/create
 TaskRouter.post('/create', function(req, res) {

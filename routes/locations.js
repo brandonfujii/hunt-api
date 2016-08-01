@@ -6,15 +6,15 @@ var express              = require('express'),
     firebaseApp          = require('../utils/firebase'); 
 
 // GET /locations
-LocationRouter.get('/', function(req, res, next) {
-  LocationController.getLocations(function(err, locations) {
-    if (err) {
-      res.send(err);
-    }
+// LocationRouter.get('/', function(req, res, next) {
+//   LocationController.getLocations(function(err, locations) {
+//     if (err) {
+//       res.send(err);
+//     }
 
-    res.json(locations);
-  });
-});
+//     res.json(locations);
+//   });
+// });
 
 // POST /locations/create
 LocationRouter.post('/create', function(req, res) {
