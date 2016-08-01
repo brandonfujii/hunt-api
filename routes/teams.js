@@ -105,7 +105,7 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       var lastDate = new Date(recentExperience.dateCompleted);
       var dateDiff = currentDate.getTime() - lastDate.getTime();
 
-      var minutesDiff = Math.round(((dateDiff % 86400000) % 3600000) / 60000);
+      var minutesDiff = Math.round(currentDate.getTime() - lastDate.getTime()) / 60000;
       var pointsGiven;
 
       if (minutesDiff <= 10 ) {
