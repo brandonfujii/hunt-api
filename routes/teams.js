@@ -97,9 +97,14 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
                 .last()
                 .value();
       var currentDate = new Date(Date.now());
-      var lastDate = new Date(recentExperience.dateCompleted.$date);
-
+      console.log("CURRENT DATE");
+      console.log(currentDate)
+      var lastDate = new Date(recentExperience.dateCompleted);
+      console.log("LAST DATE");
+      console.log(recentExperience.dateCompleted);
+      console.log(lastDate);
       var dateDiff = currentDate.getTime() - lastDate.getTime();
+
       var minutesDiff = Math.round(((dateDiff % 86400000) % 3600000) / 60000);
       var pointsGiven;
 
@@ -108,8 +113,10 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       } else if (minutesDiff >= 60) {
         pointsGiven = 10;
       } else {
-        taskGiven = completedExperience.task.points * ( minutesDiff / 60);
+        pointsGiven = completedExperience.task.points * (minutesDiff / 60);
       }
+
+      console.log("POINTS GIVEN");
       console.log(pointsGiven);
       // dev team gets no points
       // (updatedTeam.name.toLowerCase() === 'updates') ? 0 : 
