@@ -111,7 +111,8 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       }
 
       // dev team gets no points
-      updatedTeam.points += (updatedTeam.name.toLowerCase() === 'updates') ? 0 : pointsGiven;
+      // (updatedTeam.name.toLowerCase() === 'updates') ? 0 : 
+      updatedTeam.points += pointsGiven;
 
       TeamController.generateNextExperienceByTeamId(teamId, completedExperience, function(err, nextExperience) {
         updatedTeam['experiences']['next'] = nextExperience;
