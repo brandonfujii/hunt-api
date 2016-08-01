@@ -160,7 +160,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
         });
 
         // change back to filteredLocations
-        locations.map(function(location) {
+        filteredLocations.map(function(location) {
           var userCoordinates = {
             lat: currLocation.lat,
             lon: currLocation.lon
