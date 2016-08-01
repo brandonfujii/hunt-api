@@ -7,6 +7,25 @@ var mongoose      = require('mongoose'),
     Task          = require('../models/task'),
     ObjectID      = require('bson-objectid');
 
+var FINAL_TASK = {
+    "task": {   
+                "title": "Hunt Completed",
+                "description": "This should never show up.",
+                "points": 10,
+                "locationId": []
+    },
+    "location": {   
+                "name": "Hunt Complete",
+                "lon": -1.5,
+                "lat": 1.5,
+                "clueDescription": "Congratulations! You have completed all possible tasks & explored all locations.",
+                "radius": 0.00001
+    },
+    "filename": null,
+    "order": 0,
+    "dateCompleted": null
+};
+
 // GET /teams
 module.exports.getTeams = function(cb, limit) {
   Team.find(cb).limit(limit).sort({ 'points' : -1 });
@@ -191,6 +210,10 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
                       .first(Math.min(3, locationDeltas.length))
                       .value();
 
+        if(_.isEmpty(top_3)) {
+            cb(null, FINAL_TASK);
+        }
+
         Task.find(function(err, tasks) {
           if (err) {
             console.log("Could not find task!");
@@ -249,7 +272,7 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
             cb(null, nextExperience);
 
           } else {
-            cb({ error: "No tasks available" });
+            cb(null, FINAL_TASK);
           }
 
         });
