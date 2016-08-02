@@ -220,10 +220,15 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
           var completedTaskIds = team.experiences.completed.map(function(experience) {
             return experience.task._id;
           });
+          console.log("COMPLETED TASK IDS");
+          console.log(completedTaskIds);
 
           var filteredTasks = _.filter(tasks, function(task) {
             return !_.contains(completedTaskIds, task._id.toString());
           });
+
+          console.log("FILTERED TASKS");
+          console.log(filteredTasks);
 
           if (filteredTasks[0]) {
             var selectedLocation = null;

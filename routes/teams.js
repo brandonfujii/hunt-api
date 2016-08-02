@@ -125,7 +125,7 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
 
       TeamController.generateNextExperienceByTeamId(teamId, completedExperience, function(err, nextExperience) {
         updatedTeam['experiences']['next'] = nextExperience;
-
+        
         TeamController.replaceTeam(teamId, updatedTeam, {}, function(err, team) {
           TeamController.getTeams(function(err, teams) {
             if (err) {
