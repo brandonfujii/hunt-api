@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 var routeSchema = mongoose.Schema({
   teamId: String,
+  order: Number,
   locations: [
     {
       _id: String,
