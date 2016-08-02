@@ -35,7 +35,8 @@ var LocationRouter   = require('./routes/locations'),
     HuntRouter       = require('./routes/hunts'),
     UserRouter       = require('./routes/users'),
     TeamRouter       = require('./routes/teams'),
-    TaskRouter       = require('./routes/tasks');
+    TaskRouter       = require('./routes/tasks'),
+    RouteRouter      = require('./routes/routes');
 
 // Apply routes
 app.use('/api/hunts', HuntRouter);
@@ -43,6 +44,7 @@ app.use('/api/users', UserRouter);
 app.use('/api/teams', TeamRouter);
 app.use('/api/locations', LocationRouter);
 app.use('/api/tasks', TaskRouter);
+app.use('/api/routes', RouteRouter);
 
 // Define home route
 app.get('/', function(req, res, next) {
