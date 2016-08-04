@@ -111,12 +111,12 @@ TeamRouter.post('/complete/:_id', function(req, res, next) {
       var basePoints = completedExperience.task.points;
       var maxBonusPoints = 10;
 
-      if (minutesDiff <= 10 ) {
+      if (minutesDiff <= 5 ) {
           pointsGiven = basePoints + maxBonusPoints;
       } else if (minutesDiff >= 60) {
           pointsGiven = basePoints;
       } else {
-          var bonusPointsToDeduct = Math.floor(maxBonusPoints * (minutesDiff / 60));
+          var bonusPointsToDeduct = Math.floor(maxBonusPoints * (minutesDiff / 55));
           pointsGiven = basePoints + (maxBonusPoints - bonusPointsToDeduct);
       }
           
