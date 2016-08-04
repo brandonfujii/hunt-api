@@ -4,6 +4,7 @@ var mongoose      = require('mongoose'),
     geolib        = require('geolib'),
     _lib          = require('../_lib/src'),
     LocationModel = require('../models/location'),
+    Route         = require('../models/route'),
     Task          = require('../models/task'),
     ObjectID      = require('bson-objectid');
 
@@ -154,6 +155,70 @@ module.exports.generateInitialExperience = function(teamId, currentLocation, cb)
   });
 }
 
+module.exports.generateNextExperienceInRouteByTeamId = function(teamId, currCompletedExperience, cb) {
+  this.getTeamById(teamId, function(err, team) {
+    if (err) {
+      cb({ error: "The team that completed the experience could not be found!"});
+    }
+
+    Route.find({ teamId : teamId }, function(err, routes) {
+      if (err) {
+        cb({ error: "Cannot pair team with route"});
+      }
+
+      if (routes[0]) {
+        if (currCompletedExperience.location) {
+          var completedExperiences = team.experiences.completed.concat();
+          completedExperiences.push(currCompletedExperience);
+          var completedLocationIds = completedExperiences.map(function(experience) {
+            return experience.location._id;
+          });
+
+          var routeLocations = routes[0].locations;
+          var filteredLocations = _.filter(routeLocations, function(routeLocation) {
+            return !_.contains(completedLocationIds, routeLocation._id);
+          });
+          var sortedLocations = _.sortBy(filteredLocations, function(location) {
+            return -location.order;
+          });
+
+          var nextLocation = sortedLocations.pop();
+          console.log(nextLocation);
+
+          Task.find(function(err, tasks) {
+            if (err) {
+              cb({ error: "Could not get tasks"});
+            }
+
+            if (tasks.length) {
+              var nextExperience = {
+                _id: ObjectID(),
+                teamId: teamId,
+                task: tasks[0],
+                location: nextLocation,
+                order: nextLocation.order,
+                filename: null,
+                dateCompleted: null
+              };
+
+              cb(null, nextExperience);
+            } else {
+              cb(null, FINAL_TASK);
+            }
+          });
+        } else {
+          cb({ error: "Team's completed experience location does not exist" });
+        }
+      } else {
+        cb({ error: "Found no routes for this particular team"});
+      }
+
+    });
+
+  });
+};
+
+
 module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedExperience, cb) {
   this.getTeamById(teamId, function(err, team) {
     if (err) {
@@ -220,15 +285,10 @@ module.exports.generateNextExperienceByTeamId = function(teamId, currCompletedEx
           var completedTaskIds = team.experiences.completed.map(function(experience) {
             return experience.task._id;
           });
-          console.log("COMPLETED TASK IDS");
-          console.log(completedTaskIds);
 
           var filteredTasks = _.filter(tasks, function(task) {
             return !_.contains(completedTaskIds, task._id.toString());
           });
-
-          console.log("FILTERED TASKS");
-          console.log(filteredTasks);
 
           if (filteredTasks[0]) {
             var selectedLocation = null;

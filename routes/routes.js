@@ -1,6 +1,17 @@
 var express          = require('express'),
-    RouteRouter      = express.Router(), // Variable NAMING NIGHTMARE
-    RouterController = require('../controllers/routes');
+    RouteRouter      = express.Router(),
+    Route            = require('../models/route'),
+    RouteController  = require('../controllers/routes');
+
+// GET /routes
+RouteRouter.get('/', function(req, res, next) {
+  RouteController.getRoutes(function(err, routes) {
+    if (err) {
+      res.send(err);
+    }
+    res.json(routes);
+  })
+});
 
 // POST /routes/create
 RouteRouter.post('/create', function(req, res) {
