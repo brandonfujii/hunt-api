@@ -191,7 +191,7 @@ module.exports.generateNextExperienceInRouteByTeamId = function(teamId, currComp
               cb({ error: "Could not get tasks"});
             }
 
-            if (tasks.length) {
+            if (tasks.length && nextLocation) {
               var nextExperience = {
                 _id: ObjectID(),
                 teamId: teamId,
