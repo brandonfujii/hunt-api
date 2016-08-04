@@ -19,11 +19,12 @@ var FINAL_TASK = {
                 "name": "Hunt Complete",
                 "lon": -1.5,
                 "lat": 1.5,
+                "order" : 50,
                 "clueDescription": "Congratulations! You have completed all possible tasks & explored all locations.",
                 "radius": 0.00001
     },
     "filename": null,
-    "order": 0,
+    "order": 50,
     "dateCompleted": null
 };
 
